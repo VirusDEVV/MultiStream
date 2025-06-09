@@ -4,20 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Virus MultiTwitch</title>
-  <link rel="icon" type="image/png" href="https://media.discordapp.net/attachments/1337703084415254590/1381755603310870571/twitch-icon-32x32-29.png?ex=6848abaf&is=68475a2f&hm=533774fb8267b346c392793621ba92786b48018d11ca3ca30eebc8f9dadca921&=&format=webp&quality=lossless&width=640&height=640">
+  <link rel="icon" type="image/png" href="https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
+    :root {
+      --main: #9147ff;
+      --main2: #00eaff;
+      --main3: #23232b;
+      --main4: #18181b;
+      --accent: #ff4b5c;
+      --gold: #ffd700;
+      --bg-gradient: linear-gradient(120deg, #23232b 0%, #18181b 100%);
+      --neon: 0 0 16px #9147ff, 0 0 32px #00eaff99;
+    }
     body {
       font-family: 'Montserrat', Arial, sans-serif;
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      background: radial-gradient(ellipse at 60% 10%, #6c63ff55 0%, transparent 70%),
+      background: radial-gradient(ellipse at 60% 10%, #9147ff44 0%, transparent 70%),
                   radial-gradient(ellipse at 20% 80%, #00eaff33 0%, transparent 70%),
-                  linear-gradient(120deg, #23232b 0%, #3a3a4d 100%);
+                  linear-gradient(120deg, #23232b 0%, #18181b 100%);
       color: #f5f5f7;
       overflow-x: hidden;
       animation: bgmove 18s linear infinite alternate;
@@ -27,82 +37,88 @@
       100% { background-position: 100vw 100vh, 100vw 0, 0 0; }
     }
     header {
-      background: rgba(35,35,43,0.97);
+      background: linear-gradient(90deg, #9147ff 0%, #00eaff 100%);
       color: #fff;
-      padding: 2.2rem 1rem 1.2rem 1rem;
+      padding: 2.5rem 1rem 1.5rem 1rem;
       text-align: center;
-      font-size: 2.5rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-      border-bottom: 3px solid #6c63ff;
-      box-shadow: 0 2px 32px #6c63ff55, 0 2px 8px #0004;
+      font-size: 2.7rem;
+      font-family: 'Orbitron', 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
+      letter-spacing: 3px;
+      border-bottom: 4px solid #00eaff;
+      box-shadow: 0 2px 32px #9147ff55, 0 2px 8px #00eaff44;
       user-select: none;
-      text-shadow: 0 0 16px #6c63ff, 0 0 32px #00eaff99;
-      animation: neon-flicker 2s infinite alternate;
+      text-shadow: 0 0 24px #9147ff, 0 0 32px #00eaff99;
       position: relative;
       z-index: 2;
+      border-radius: 0 0 32px 32px;
+      animation: neon-flicker 2s infinite alternate;
     }
     @keyframes neon-flicker {
-      0% { text-shadow: 0 0 16px #6c63ff, 0 0 32px #00eaff99; }
-      100% { text-shadow: 0 0 32px #6c63ff, 0 0 64px #00eaff; }
+      0% { text-shadow: 0 0 24px #9147ff, 0 0 32px #00eaff99; }
+      100% { text-shadow: 0 0 48px #9147ff, 0 0 64px #00eaff; }
     }
     #controls {
-      padding: 2rem 1rem 1rem 1rem;
+      padding: 2.2rem 1rem 1.2rem 1rem;
       text-align: center;
-      background: rgba(41,41,58,0.92);
-      border-radius: 0 0 24px 24px;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 32px #6c63ff33;
+      background: linear-gradient(120deg, #23232b 80%, #9147ff22 100%);
+      border-radius: 0 0 32px 32px;
+      margin-bottom: 2.2rem;
+      box-shadow: 0 4px 32px #9147ff33;
       position: relative;
       animation: fadeIn 1s;
       z-index: 2;
+      border-bottom: 2px solid #00eaff;
     }
     #streamerInput {
-      padding: 0.9rem 1.3rem;
-      font-size: 1.2rem;
+      padding: 1.1rem 1.5rem;
+      font-size: 1.25rem;
       border: none;
-      border-radius: 12px;
-      margin-right: 0.5rem;
-      width: 240px;
-      background: #23232b;
+      border-radius: 16px;
+      margin-right: 0.7rem;
+      width: 260px;
+      background: #18181b;
       color: #fff;
       outline: none;
-      box-shadow: 0 2px 12px #6c63ff33, 0 2px 8px #0002;
-      border: 2px solid transparent;
+      box-shadow: 0 2px 12px #9147ff33, 0 2px 8px #00eaff22;
+      border: 2px solid #23232b;
       transition: box-shadow 0.2s, border 0.2s;
+      font-family: 'Montserrat', Arial, sans-serif;
     }
     #streamerInput:focus {
-      box-shadow: 0 2px 24px #6c63ff99, 0 2px 8px #00eaff99;
-      border: 2px solid #6c63ff;
+      box-shadow: 0 2px 24px #9147ff99, 0 2px 8px #00eaff99;
+      border: 2px solid #9147ff;
+      background: #23232b;
     }
     .btn, .clear-btn {
-      padding: 0.9rem 1.5rem;
-      font-size: 1.2rem;
+      padding: 1.1rem 1.7rem;
+      font-size: 1.25rem;
       border: none;
-      border-radius: 12px;
-      background: linear-gradient(90deg, #6c63ff 40%, #00eaff 100%);
+      border-radius: 16px;
+      background: linear-gradient(90deg, #9147ff 40%, #00eaff 100%);
       color: #fff;
       cursor: pointer;
       font-weight: bold;
       letter-spacing: 1px;
       transition: background 0.2s, transform 0.1s, box-shadow 0.2s, color 0.2s;
       margin-left: 0.2rem;
-      box-shadow: 0 2px 16px #6c63ff33, 0 2px 8px #00eaff33;
+      box-shadow: 0 2px 16px #9147ff33, 0 2px 8px #00eaff33;
       position: relative;
       overflow: hidden;
+      border: 2px solid #23232b;
     }
     .btn:hover, .clear-btn:hover {
-      background: linear-gradient(90deg, #00eaff 40%, #6c63ff 100%);
+      background: linear-gradient(90deg, #00eaff 40%, #9147ff 100%);
       transform: scale(1.09) rotate(-2deg);
-      box-shadow: 0 6px 36px #00eaffaa, 0 2px 8px #6c63ff99;
+      box-shadow: 0 6px 36px #00eaffaa, 0 2px 8px #9147ff99;
       color: #fff;
       border: 2px solid #00eaff;
     }
     .fav-btn {
       background: none;
       border: none;
-      color: #ffb400;
-      font-size: 1.7rem;
+      color: var(--gold);
+      font-size: 2rem;
       cursor: pointer;
       vertical-align: middle;
       margin-left: 0.2rem;
@@ -113,14 +129,14 @@
     }
     .fav-btn.faved {
       color: #ffd700;
-      text-shadow: 0 0 12px #ffd70099;
-      transform: scale(1.2) rotate(-8deg);
+      text-shadow: 0 0 16px #ffd70099;
+      transform: scale(1.25) rotate(-8deg);
       animation: popStar 0.4s;
     }
     @keyframes popStar {
       0% { transform: scale(1) rotate(0);}
       60% { transform: scale(1.3) rotate(-18deg);}
-      100% { transform: scale(1.2) rotate(-8deg);}
+      100% { transform: scale(1.25) rotate(-8deg);}
     }
     .fav-btn:hover {
       color: #ffd700;
@@ -130,30 +146,32 @@
       display: flex;
       align-items: center;
       gap: 1.2rem;
-      background: linear-gradient(90deg, #23232b 70%, #6c63ff33 100%);
-      border-radius: 16px;
-      padding: 0.7rem 1.2rem;
-      margin: 1.2rem auto 1.7rem auto;
-      box-shadow: 0 2px 16px #6c63ff22;
-      max-width: 900px;
-      min-height: 56px;
+      background: linear-gradient(90deg, #23232b 70%, #9147ff33 100%);
+      border-radius: 20px;
+      padding: 1rem 1.5rem;
+      margin: 1.5rem auto 2rem auto;
+      box-shadow: 0 2px 16px #9147ff22;
+      max-width: 950px;
+      min-height: 60px;
       position: relative;
       animation: fadeIn 1.2s;
+      border: 1.5px solid #9147ff55;
     }
     .favorites-label {
       color: #ffd700;
       font-weight: bold;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       letter-spacing: 1px;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      text-shadow: 0 0 8px #ffd70055;
+      text-shadow: 0 0 12px #ffd70055;
+      font-family: 'Orbitron', 'Montserrat', Arial, sans-serif;
     }
     .favorites-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.7rem;
+      gap: 0.8rem;
       align-items: center;
       margin-left: 0.7rem;
       flex: 1;
@@ -161,48 +179,51 @@
     .favorite-pill {
       display: flex;
       align-items: center;
-      background: linear-gradient(90deg, #35354a 60%, #6c63ff33 100%);
+      background: linear-gradient(90deg, #35354a 60%, #9147ff33 100%);
       color: #ffd700;
-      border-radius: 20px;
-      padding: 0.35rem 1.1rem 0.35rem 0.9rem;
-      font-size: 1.05rem;
-      font-weight: 600;
+      border-radius: 22px;
+      padding: 0.45rem 1.3rem 0.45rem 1.1rem;
+      font-size: 1.13rem;
+      font-weight: 700;
       cursor: pointer;
-      border: 1.5px solid #444;
+      border: 2px solid #9147ff77;
       transition: background 0.2s, border 0.2s, color 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 12px #6c63ff22;
+      box-shadow: 0 2px 12px #9147ff22;
       user-select: none;
       position: relative;
-      opacity: 0.93;
+      opacity: 0.96;
       animation: fadeIn 0.7s;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px #ffd70044;
     }
     .favorite-pill:hover {
-      background: linear-gradient(90deg, #6c63ff 60%, #35354a 100%);
+      background: linear-gradient(90deg, #9147ff 60%, #35354a 100%);
       color: #fff;
-      border: 1.5px solid #6c63ff;
+      border: 2px solid #00eaff;
       opacity: 1;
-      box-shadow: 0 4px 16px #6c63ff55;
+      box-shadow: 0 4px 16px #00eaff77;
     }
     .favorite-pill .pill-remove {
-      margin-left: 0.7rem;
+      margin-left: 0.8rem;
       color: #ff4b5c;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       background: none;
       border: none;
       cursor: pointer;
-      transition: color 0.2s;
+      transition: color 0.2s, background 0.2s;
       outline: none;
       padding: 0 0.2rem;
+      border-radius: 50%;
     }
     .favorite-pill .pill-remove:hover {
       color: #fff;
       background: #ff4b5c;
-      border-radius: 50%;
     }
     .favorite-pill .pill-twitch {
-      margin-right: 0.5rem;
-      color: #a970ff;
-      font-size: 1.1rem;
+      margin-right: 0.7rem;
+      color: #9147ff;
+      font-size: 1.2rem;
+      text-shadow: 0 0 8px #9147ff88;
     }
     .error-msg {
       color: #ff4b5c;
@@ -222,24 +243,24 @@
     }
     #streams {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-      gap: 32px;
-      padding: 2.5rem 2vw;
-      max-width: 1600px;
+      grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+      gap: 40px;
+      padding: 2.8rem 2vw;
+      max-width: 1800px;
       margin: auto;
       animation: fadeIn 1.2s;
     }
     .stream-container {
-      background: linear-gradient(120deg, #23232b 80%, #6c63ff22 100%);
-      border-radius: 22px;
-      box-shadow: 0 8px 32px #6c63ff44, 0 2px 8px #0005;
-      padding: 1.2rem 1rem 1.5rem 1rem;
+      background: linear-gradient(120deg, #23232b 80%, #9147ff22 100%);
+      border-radius: 28px;
+      box-shadow: 0 8px 32px #9147ff44, 0 2px 8px #00eaff44;
+      padding: 1.5rem 1.2rem 2rem 1.2rem;
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: stretch;
       transition: box-shadow 0.3s, transform 0.2s, border 0.2s;
-      border: 2px solid transparent;
+      border: 2.5px solid #9147ff33;
       animation: fadeInUp 0.7s;
       overflow: hidden;
     }
@@ -252,32 +273,33 @@
       to { opacity: 1; transform: translateY(0) scale(1);}
     }
     .stream-container:hover {
-      box-shadow: 0 12px 48px #00eaff77, 0 2px 8px #6c63ff99;
-      border: 2px solid #00eaff;
-      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 12px 48px #00eaff77, 0 2px 8px #9147ff99;
+      border: 2.5px solid #00eaff;
+      transform: translateY(-8px) scale(1.04);
     }
     .stream-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 0.7rem;
+      margin-bottom: 1rem;
     }
     .stream-title {
-      font-size: 1.3rem;
+      font-size: 1.45rem;
       font-weight: bold;
       color: #fff;
       letter-spacing: 1px;
       text-transform: capitalize;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      text-shadow: 0 0 8px #6c63ff55;
+      gap: 0.7rem;
+      text-shadow: 0 0 12px #9147ff55;
+      font-family: 'Orbitron', 'Montserrat', Arial, sans-serif;
     }
     .stream-fav-btn {
       background: none;
       border: none;
-      color: #ffb400;
-      font-size: 1.3rem;
+      color: #ffd700;
+      font-size: 1.4rem;
       cursor: pointer;
       margin-left: 0.2rem;
       transition: color 0.2s, transform 0.15s;
@@ -287,8 +309,8 @@
     }
     .stream-fav-btn.faved {
       color: #ffd700;
-      text-shadow: 0 0 8px #ffd70099;
-      transform: scale(1.15) rotate(-8deg);
+      text-shadow: 0 0 12px #ffd70099;
+      transform: scale(1.18) rotate(-8deg);
       animation: popStar 0.4s;
     }
     .stream-fav-btn:hover {
@@ -299,13 +321,14 @@
       background: #ff4b5c;
       color: #fff;
       border: none;
-      border-radius: 8px;
-      padding: 0.4rem 0.9rem;
-      font-size: 1rem;
+      border-radius: 10px;
+      padding: 0.5rem 1.1rem;
+      font-size: 1.1rem;
       cursor: pointer;
       font-weight: bold;
       transition: background 0.2s, transform 0.1s;
       box-shadow: 0 2px 8px #ff4b5c33;
+      letter-spacing: 1px;
     }
     .remove-btn:hover {
       background: #ff1a40;
@@ -316,50 +339,52 @@
     .stream-player {
       width: 100%;
       aspect-ratio: 16/9;
-      min-height: 490px; /* Augmenté depuis 380px */
-      max-height: 95vh;  /* Augmenté depuis 70vh */
+      min-height: 650px;
+      max-height: 96vh;
       border: none;
-      border-radius: 18px;
+      border-radius: 22px;
       margin-bottom: 0.5rem;
-      box-shadow: 0 2px 24px #6c63ff33;
+      box-shadow: 0 2px 32px #9147ff33, 0 2px 8px #00eaff33;
       transition: box-shadow 0.2s;
-      outline: 2px solid #6c63ff44;
+      outline: 2.5px solid #9147ff44;
       outline-offset: -4px;
       animation: rgb-glow 3s linear infinite alternate;
       background: none;
     }
     @keyframes rgb-glow {
-      0% { box-shadow: 0 2px 24px #6c63ff33; outline-color: #6c63ff44;}
-      50% { box-shadow: 0 4px 48px #00eaff99; outline-color: #00eaff99;}
-      100% { box-shadow: 0 2px 24px #6c63ff33; outline-color: #6c63ff44;}
+      0% { box-shadow: 0 2px 32px #9147ff33; outline-color: #9147ff44;}
+      50% { box-shadow: 0 4px 64px #00eaff99; outline-color: #00eaff99;}
+      100% { box-shadow: 0 2px 32px #9147ff33; outline-color: #9147ff44;}
     }
     footer {
-      background: rgba(35,35,43,0.97);
+      background: linear-gradient(90deg, #23232b 80%, #9147ff22 100%);
       color: #fff;
       text-align: center;
-      padding: 1.2rem 0;
-      border-top: 2px solid #6c63ff;
-      margin-top: 2rem;
-      font-size: 1.1rem;
+      padding: 1.5rem 0;
+      border-top: 2.5px solid #9147ff;
+      margin-top: 2.5rem;
+      font-size: 1.15rem;
       letter-spacing: 1px;
-      box-shadow: 0 -2px 24px #6c63ff33;
+      box-shadow: 0 -2px 24px #9147ff33;
       animation: fadeInUp 1.2s;
+      border-radius: 32px 32px 0 0;
+      font-family: 'Montserrat', Arial, sans-serif;
     }
     ::-webkit-scrollbar {
       width: 10px;
       background: #23232b;
     }
     ::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #6c63ff 0%, #00eaff 100%);
+      background: linear-gradient(135deg, #9147ff 0%, #00eaff 100%);
       border-radius: 8px;
     }
-    @media (max-width: 900px) {
+    @media (max-width: 1200px) {
       #streams {
         grid-template-columns: 1fr;
         padding: 1rem 0.5rem;
       }
       .stream-player {
-        height: 160px;
+        min-height: 350px;
       }
       .stream-container {
         padding: 0.7rem 0.5rem 1rem 0.5rem;
@@ -375,6 +400,9 @@
       .favorites-list {
         margin-left: 0;
         justify-content: flex-start;
+      }
+      .stream-player {
+        min-height: 180px;
       }
     }
     @media (max-width: 600px) {
@@ -403,7 +431,7 @@
     body.dark-mode header,
     body.dark-mode footer,
     body.dark-mode #controls {
-      background: rgba(24,24,32,0.97);
+      background: linear-gradient(90deg, #18181b 80%, #23232b 100%);
       color: #e0e0e0;
       border-color: #00eaff;
     }
@@ -419,21 +447,21 @@
     body.dark-mode .btn:hover, body.dark-mode .clear-btn:hover {
       background: linear-gradient(90deg, #00eaff 40%, #23232b 100%);
       color: #fff;
-      border: 2px solid #6c63ff;
+      border: 2px solid #9147ff;
     }
     body.dark-mode .favorites-bar {
       background: linear-gradient(90deg, #18181b 70%, #23232b 100%);
       box-shadow: 0 2px 16px #00eaff22;
     }
     body.dark-mode .favorite-pill {
-      background: linear-gradient(90deg, #23232b 60%, #6c63ff33 100%);
+      background: linear-gradient(90deg, #23232b 60%, #9147ff33 100%);
       color: #ffd700;
-      border: 1.5px solid #333;
+      border: 2px solid #333;
     }
     body.dark-mode .favorite-pill:hover {
-      background: linear-gradient(90deg, #6c63ff 60%, #23232b 100%);
+      background: linear-gradient(90deg, #9147ff 60%, #23232b 100%);
       color: #fff;
-      border: 1.5px solid #6c63ff;
+      border: 2px solid #00eaff;
     }
     .dark-toggle {
       position: absolute;
@@ -442,15 +470,16 @@
       background: none;
       border: none;
       color: #ffd700;
-      font-size: 1.7rem;
+      font-size: 2.1rem;
       cursor: pointer;
       z-index: 10;
       transition: color 0.2s, transform 0.15s;
+      text-shadow: 0 0 12px #ffd70099;
     }
     .dark-toggle:hover {
       color: #fff;
       transform: scale(1.15) rotate(-8deg);
-      text-shadow: 0 0 8px #ffd70099;
+      text-shadow: 0 0 16px #ffd700cc;
     }
     .feedback-msg {
       position: fixed;
@@ -483,7 +512,7 @@
 <body>
   <button class="dark-toggle" id="darkToggle" title="Basculer le mode sombre"><i class="fa-solid fa-moon"></i></button>
   <header>
-    <i class="fa-brands fa-twitch" style="color:#a970ff;margin-right:0.5rem;"></i>
+    <i class="fa-brands fa-twitch" style="color:#fff;margin-right:0.7rem;font-size:2.2rem;text-shadow:0 0 16px #9147ff;"></i>
     Virus MultiTwitch Viewer
   </header>
   <div id="controls">
@@ -499,7 +528,7 @@
   </div>
   <div id="streams"></div>
   <footer>
-    <span><i class="fa-solid fa-heart" style="color:#ff4b5c;"></i> VirusDEV &copy; 2025 — 💬 Petite création en mode chill pour régaler tout le monde 💬 !</span>
+    <span><i class="fa-solid fa-heart" style="color:#ff4b5c;"></i> VirusDEV &copy; 2025 — <span style="color:#00eaff">Création stylée pour la commu Twitch !</span></span>
   </footer>
   <div id="feedbackMsg" class="feedback-msg"></div>
   <script>
