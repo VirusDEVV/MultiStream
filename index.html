@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virus MultiTwitch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 60% 10%, #6c63ff55 0%, transparent 70%),
+                  radial-gradient(ellipse at 20% 80%, #00eaff33 0%, transparent 70%),
+                  linear-gradient(120deg, #23232b 0%, #3a3a4d 100%);
+      color: #f5f5f7;
+      overflow-x: hidden;
+      animation: bgmove 18s linear infinite alternate;
+    }
+    @keyframes bgmove {
+      0% { background-position: 0 0, 0 0, 0 0; }
+      100% { background-position: 100vw 100vh, 100vw 0, 0 0; }
+    }
+    header {
+      background: rgba(35,35,43,0.97);
+      color: #fff;
+      padding: 2.2rem 1rem 1.2rem 1rem;
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      border-bottom: 3px solid #6c63ff;
+      box-shadow: 0 2px 32px #6c63ff55, 0 2px 8px #0004;
+      user-select: none;
+      text-shadow: 0 0 16px #6c63ff, 0 0 32px #00eaff99;
+      animation: neon-flicker 2s infinite alternate;
+      position: relative;
+      z-index: 2;
+    }
+    @keyframes neon-flicker {
+      0% { text-shadow: 0 0 16px #6c63ff, 0 0 32px #00eaff99; }
+      100% { text-shadow: 0 0 32px #6c63ff, 0 0 64px #00eaff; }
+    }
+    #controls {
+      padding: 2rem 1rem 1rem 1rem;
+      text-align: center;
+      background: rgba(41,41,58,0.92);
+      border-radius: 0 0 24px 24px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 32px #6c63ff33;
+      position: relative;
+      animation: fadeIn 1s;
+      z-index: 2;
+    }
+    #streamerInput {
+      padding: 0.9rem 1.3rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 12px;
+      margin-right: 0.5rem;
+      width: 240px;
+      background: #23232b;
+      color: #fff;
+      outline: none;
+      box-shadow: 0 2px 12px #6c63ff33, 0 2px 8px #0002;
+      border: 2px solid transparent;
+      transition: box-shadow 0.2s, border 0.2s;
+    }
+    #streamerInput:focus {
+      box-shadow: 0 2px 24px #6c63ff99, 0 2px 8px #00eaff99;
+      border: 2px solid #6c63ff;
+    }
+    .btn, .clear-btn {
+      padding: 0.9rem 1.5rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #6c63ff 40%, #00eaff 100%);
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 1px;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      margin-left: 0.2rem;
+      box-shadow: 0 2px 16px #6c63ff33, 0 2px 8px #00eaff33;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn:hover, .clear-btn:hover {
+      background: linear-gradient(90deg, #00eaff 40%, #6c63ff 100%);
+      transform: scale(1.06) rotate(-1deg);
+      box-shadow: 0 4px 32px #00eaff77, 0 2px 8px #6c63ff55;
+    }
+    .fav-btn {
+      background: none;
+      border: none;
+      color: #ffb400;
+      font-size: 1.7rem;
+      cursor: pointer;
+      vertical-align: middle;
+      margin-left: 0.2rem;
+      transition: color 0.2s, transform 0.15s;
+      outline: none;
+      position: relative;
+      filter: drop-shadow(0 0 6px #ffd70055);
+    }
+    .fav-btn.faved {
+      color: #ffd700;
+      text-shadow: 0 0 12px #ffd70099;
+      transform: scale(1.2) rotate(-8deg);
+      animation: popStar 0.4s;
+    }
+    @keyframes popStar {
+      0% { transform: scale(1) rotate(0);}
+      60% { transform: scale(1.3) rotate(-18deg);}
+      100% { transform: scale(1.2) rotate(-8deg);}
+    }
+    .fav-btn:hover {
+      color: #ffd700;
+      transform: scale(1.15) rotate(-8deg);
+    }
+    #favorites-title {
+      color: #ffd700;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin: 1.2rem 0 0.3rem 0;
+      letter-spacing: 1px;
+      text-align: center;
+      opacity: 0.85;
+      animation: fadeIn 1.2s;
+      text-shadow: 0 0 8px #ffd70055;
+    }
+    #favorites {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.7rem;
+      margin-bottom: 1.2rem;
+      margin-top: 0.2rem;
+      animation: fadeIn 1.2s;
+    }
+    .favorite-chip {
+      background: linear-gradient(90deg, #35354a 60%, #6c63ff33 100%);
+      color: #ffd700;
+      border-radius: 16px;
+      padding: 0.4rem 1.1rem 0.4rem 0.9rem;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border: 1.5px solid #444;
+      transition: background 0.2s, border 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px #6c63ff22;
+      user-select: none;
+      position: relative;
+      opacity: 0.93;
+      animation: fadeIn 0.7s;
+    }
+    .favorite-chip:hover {
+      background: linear-gradient(90deg, #6c63ff 60%, #35354a 100%);
+      color: #fff;
+      border: 1.5px solid #6c63ff;
+      opacity: 1;
+      box-shadow: 0 4px 16px #6c63ff55;
+    }
+    .favorite-chip .remove-fav {
+      margin-left: 0.5rem;
+      color: #ff4b5c;
+      font-size: 1.1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
+      outline: none;
+    }
+    .favorite-chip .remove-fav:hover {
+      color: #fff;
+    }
+    .error-msg {
+      color: #ff4b5c;
+      font-weight: bold;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      display: none;
+      animation: shake 0.4s;
+    }
+    @keyframes shake {
+      0% { transform: translateX(0);}
+      25% { transform: translateX(-8px);}
+      50% { transform: translateX(8px);}
+      75% { transform: translateX(-8px);}
+      100% { transform: translateX(0);}
+    }
+    #streams {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 32px;
+      padding: 2.5rem 2vw;
+      max-width: 1600px;
+      margin: auto;
+      animation: fadeIn 1.2s;
+    }
+    .stream-container {
+      background: linear-gradient(120deg, #23232b 80%, #6c63ff22 100%);
+      border-radius: 22px;
+      box-shadow: 0 8px 32px #6c63ff44, 0 2px 8px #0005;
+      padding: 1.2rem 1rem 1.5rem 1rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      transition: box-shadow 0.3s, transform 0.2s, border 0.2s;
+      border: 2px solid transparent;
+      animation: fadeInUp 0.7s;
+      overflow: hidden;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0;}
+      to { opacity: 1;}
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px) scale(0.95);}
+      to { opacity: 1; transform: translateY(0) scale(1);}
+    }
+    .stream-container:hover {
+      box-shadow: 0 12px 48px #00eaff77, 0 2px 8px #6c63ff99;
+      border: 2px solid #00eaff;
+      transform: translateY(-6px) scale(1.03);
+    }
+    .stream-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.7rem;
+    }
+    .stream-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: 1px;
+      text-transform: capitalize;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-shadow: 0 0 8px #6c63ff55;
+    }
+    .stream-fav-btn {
+      background: none;
+      border: none;
+      color: #ffb400;
+      font-size: 1.3rem;
+      cursor: pointer;
+      margin-left: 0.2rem;
+      transition: color 0.2s, transform 0.15s;
+      outline: none;
+      padding: 0;
+      filter: drop-shadow(0 0 6px #ffd70055);
+    }
+    .stream-fav-btn.faved {
+      color: #ffd700;
+      text-shadow: 0 0 8px #ffd70099;
+      transform: scale(1.15) rotate(-8deg);
+      animation: popStar 0.4s;
+    }
+    .stream-fav-btn:hover {
+      color: #ffd700;
+      transform: scale(1.1) rotate(-8deg);
+    }
+    .remove-btn {
+      background: #ff4b5c;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.4rem 0.9rem;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px #ff4b5c33;
+    }
+    .remove-btn:hover {
+      background: #c82333;
+      transform: scale(1.08);
+    }
+    .stream-player {
+      width: 100%;
+      height: 300px;
+      border: none;
+      border-radius: 14px;
+      margin-bottom: 0.5rem;
+      background: #18181b;
+      box-shadow: 0 2px 24px #6c63ff33;
+      transition: box-shadow 0.2s;
+      outline: 2px solid #6c63ff44;
+      outline-offset: -4px;
+      animation: rgb-glow 3s linear infinite alternate;
+    }
+    @keyframes rgb-glow {
+      0% { box-shadow: 0 2px 24px #6c63ff33; outline-color: #6c63ff44;}
+      50% { box-shadow: 0 4px 48px #00eaff99; outline-color: #00eaff99;}
+      100% { box-shadow: 0 2px 24px #6c63ff33; outline-color: #6c63ff44;}
+    }
+    .stream-chat {
+      width: 100%;
+      height: 220px;
+      border: none;
+      border-radius: 14px;
+      background: #18181b;
+      box-shadow: 0 2px 16px #00eaff33;
+      transition: box-shadow 0.2s;
+      outline: 2px solid #00eaff44;
+      outline-offset: -4px;
+    }
+    .stream-chat:hover {
+      box-shadow: 0 4px 32px #00eaff99;
+      outline-color: #6c63ff99;
+    }
+    footer {
+      background: rgba(35,35,43,0.97);
+      color: #fff;
+      text-align: center;
+      padding: 1.2rem 0;
+      border-top: 2px solid #6c63ff;
+      margin-top: 2rem;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      box-shadow: 0 -2px 24px #6c63ff33;
+      animation: fadeInUp 1.2s;
+    }
+    ::-webkit-scrollbar {
+      width: 10px;
+      background: #23232b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #6c63ff 0%, #00eaff 100%);
+      border-radius: 8px;
+    }
+    @media (max-width: 900px) {
+      #streams {
+        grid-template-columns: 1fr;
+        padding: 1rem 0.5rem;
+      }
+      .stream-player, .stream-chat {
+        height: 160px;
+      }
+      .stream-container {
+        padding: 0.7rem 0.5rem 1rem 0.5rem;
+      }
+    }
+    @media (max-width: 600px) {
+      header {
+        font-size: 1.1rem;
+        padding: 1.2rem 0.5rem 0.7rem 0.5rem;
+      }
+      #controls {
+        padding: 1rem 0.5rem 0.5rem 0.5rem;
+      }
+      #streamerInput {
+        width: 100px;
+        font-size: 1rem;
+      }
+      .btn, .clear-btn {
+        font-size: 1rem;
+        padding: 0.6rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Virus MultiTwitch Viewer
+  </header>
+  <div id="controls">
+    <input type="text" id="streamerInput" placeholder="Nom du streamer Twitch" autocomplete="off" autofocus>
+    <button class="btn" onclick="addStreamer()">Ajouter</button>
+    <button class="clear-btn" onclick="clearAll()">Tout supprimer</button>
+    <button class="fav-btn" id="favBtn" title="Ajouter aux favoris">&#9734;</button>
+    <div id="favorites-title" style="display:none;">Favoris :</div>
+    <div id="favorites"></div>
+    <div id="errorMsg" class="error-msg"></div>
+  </div>
+  <div id="streams"></div>
+  <footer>
+    <span>VirusDEV &copy; 2025 — Simple, animé, et pratique pour suivre tes streamers favoris !</span>
+  </footer>
+  <script>
+    const parent = location.hostname;
+    let favorites = JSON.parse(localStorage.getItem('twitchFavorites') || '[]');
+
+    function showError(msg) {
+      const errorDiv = document.getElementById('errorMsg');
+      errorDiv.textContent = msg;
+      errorDiv.style.display = 'block';
+      setTimeout(() => {
+        errorDiv.style.display = 'none';
+      }, 1800);
+    }
+
+    function addStreamer(streamerName) {
+      const input = document.getElementById('streamerInput');
+      const streamer = (streamerName || input.value).trim().toLowerCase();
+      if (streamer) {
+        if (document.getElementById('stream-' + streamer)) {
+          showError('Ce streamer est déjà affiché !');
+          input.value = '';
+          return;
+        }
+        const container = document.createElement('div');
+        container.className = 'stream-container';
+        container.id = 'stream-' + streamer;
+        container.innerHTML = `
+          <div class="stream-header">
+            <span class="stream-title">${streamer}
+              <button class="stream-fav-btn${favorites.includes(streamer) ? ' faved' : ''}" title="Ajouter/Retirer des favoris" onclick="toggleFavorite('${streamer}');event.stopPropagation();">${favorites.includes(streamer) ? '&#9733;' : '&#9734;'}</button>
+            </span>
+            <button class="remove-btn" onclick="removeStreamer('${streamer}')">✖</button>
+          </div>
+          <iframe
+            class="stream-player"
+            src="https://player.twitch.tv/?channel=${streamer}&parent=${parent}"
+            allowfullscreen>
+          </iframe>
+          <iframe
+            class="stream-chat"
+            src="https://www.twitch.tv/embed/${streamer}/chat?parent=${parent}">
+          </iframe>
+        `;
+        document.getElementById('streams').appendChild(container);
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    function removeStreamer(streamer) {
+      const el = document.getElementById('stream-' + streamer);
+      if (el) el.remove();
+    }
+
+    function clearAll() {
+      document.getElementById('streams').innerHTML = '';
+    }
+
+    // Favoris
+    function updateFavBtn() {
+      const input = document.getElementById('streamerInput');
+      const favBtn = document.getElementById('favBtn');
+      const streamer = input.value.trim().toLowerCase();
+      if (streamer && favorites.includes(streamer)) {
+        favBtn.classList.add('faved');
+        favBtn.innerHTML = '&#9733;';
+      } else {
+        favBtn.classList.remove('faved');
+        favBtn.innerHTML = '&#9734;';
+      }
+    }
+
+    function addToFavorites() {
+      const input = document.getElementById('streamerInput');
+      const streamer = input.value.trim().toLowerCase();
+      if (streamer && !favorites.includes(streamer)) {
+        favorites.push(streamer);
+        localStorage.setItem('twitchFavorites', JSON.stringify(favorites));
+        renderFavorites();
+        updateFavBtn();
+      }
+    }
+
+    function toggleFavorite(streamer) {
+      if (favorites.includes(streamer)) {
+        favorites = favorites.filter(fav => fav !== streamer);
+      } else {
+        favorites.push(streamer);
+      }
+      localStorage.setItem('twitchFavorites', JSON.stringify(favorites));
+      renderFavorites();
+      updateFavBtn();
+      // Met à jour l'étoile sur la carte si ouverte
+      const favBtn = document.querySelector(`#stream-${streamer} .stream-fav-btn`);
+      if (favBtn) {
+        if (favorites.includes(streamer)) {
+          favBtn.classList.add('faved');
+          favBtn.innerHTML = '&#9733;';
+        } else {
+          favBtn.classList.remove('faved');
+          favBtn.innerHTML = '&#9734;';
+        }
+      }
+    }
+
+    function removeFavorite(streamer) {
+      favorites = favorites.filter(fav => fav !== streamer);
+      localStorage.setItem('twitchFavorites', JSON.stringify(favorites));
+      renderFavorites();
+      updateFavBtn();
+      // Met à jour l'étoile sur la carte si ouverte
+      const favBtn = document.querySelector(`#stream-${streamer} .stream-fav-btn`);
+      if (favBtn) {
+        favBtn.classList.remove('faved');
+        favBtn.innerHTML = '&#9734;';
+      }
+    }
+
+    function renderFavorites() {
+      const favDiv = document.getElementById('favorites');
+      const favTitle = document.getElementById('favorites-title');
+      favDiv.innerHTML = '';
+      if (favorites.length > 0) {
+        favTitle.style.display = '';
+        favorites.forEach(fav => {
+          const chip = document.createElement('div');
+          chip.className = 'favorite-chip';
+          chip.innerHTML = `
+            <span onclick="addStreamer('${fav}')">${fav}</span>
+            <button class="remove-fav" title="Retirer des favoris" onclick="removeFavorite('${fav}');event.stopPropagation();">&times;</button>
+          `;
+          favDiv.appendChild(chip);
+        });
+      } else {
+        favTitle.style.display = 'none';
+      }
+    }
+
+    // Ajout avec la touche Entrée
+    document.getElementById('streamerInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') addStreamer();
+      setTimeout(updateFavBtn, 10);
+    });
+
+    document.getElementById('streamerInput').addEventListener('input', updateFavBtn);
+    document.getElementById('favBtn').addEventListener('click', addToFavorites);
+
+    // Focus auto sur l'input au chargement
+    window.onload = () => {
+      document.getElementById('streamerInput').focus();
+      renderFavorites();
+      updateFavBtn();
+    };
+
+    // Pour accès depuis HTML
+    window.addStreamer = addStreamer;
+    window.removeStreamer = removeStreamer;
+    window.clearAll = clearAll;
+    window.removeFavorite = removeFavorite;
+    window.toggleFavorite = toggleFavorite;
+  </script>
+</body>
+</html>
+
