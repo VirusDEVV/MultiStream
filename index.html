@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Ajout Font Awesome pour les icônes -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
       font-family: 'Montserrat', Arial, sans-serif;
@@ -83,7 +85,7 @@
       cursor: pointer;
       font-weight: bold;
       letter-spacing: 1px;
-      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s, color 0.2s;
       margin-left: 0.2rem;
       box-shadow: 0 2px 16px #6c63ff33, 0 2px 8px #00eaff33;
       position: relative;
@@ -91,8 +93,10 @@
     }
     .btn:hover, .clear-btn:hover {
       background: linear-gradient(90deg, #00eaff 40%, #6c63ff 100%);
-      transform: scale(1.06) rotate(-1deg);
-      box-shadow: 0 4px 32px #00eaff77, 0 2px 8px #6c63ff55;
+      transform: scale(1.09) rotate(-2deg);
+      box-shadow: 0 6px 36px #00eaffaa, 0 2px 8px #6c63ff99;
+      color: #fff;
+      border: 2px solid #00eaff;
     }
     .fav-btn {
       background: none;
@@ -284,21 +288,25 @@
       box-shadow: 0 2px 8px #ff4b5c33;
     }
     .remove-btn:hover {
-      background: #c82333;
-      transform: scale(1.08);
+      background: #ff1a40;
+      color: #fff;
+      transform: scale(1.12);
+      box-shadow: 0 4px 16px #ff4b5c99;
     }
     .stream-player {
       width: 100%;
-      height: 300px;
+      aspect-ratio: 16/9;
+      min-height: 380px;
+      max-height: 70vh;
       border: none;
-      border-radius: 14px;
+      border-radius: 18px;
       margin-bottom: 0.5rem;
-      background: #18181b;
       box-shadow: 0 2px 24px #6c63ff33;
       transition: box-shadow 0.2s;
       outline: 2px solid #6c63ff44;
       outline-offset: -4px;
       animation: rgb-glow 3s linear infinite alternate;
+      background: none; /* Supprime le fond noir */
     }
     @keyframes rgb-glow {
       0% { box-shadow: 0 2px 24px #6c63ff33; outline-color: #6c63ff44;}
@@ -369,30 +377,129 @@
         padding: 0.6rem 1rem;
       }
     }
+
+    /* Dark mode styles */
+    body.dark-mode {
+      background: radial-gradient(ellipse at 60% 10%, #23232b 0%, transparent 70%),
+                  radial-gradient(ellipse at 20% 80%, #18181b 0%, transparent 70%),
+                  linear-gradient(120deg, #18181b 0%, #23232b 100%);
+      color: #e0e0e0;
+    }
+    body.dark-mode header,
+    body.dark-mode footer,
+    body.dark-mode #controls {
+      background: rgba(24,24,32,0.97);
+      color: #e0e0e0;
+      border-color: #00eaff;
+    }
+    body.dark-mode .stream-container {
+      background: linear-gradient(120deg, #18181b 80%, #23232b 100%);
+      box-shadow: 0 8px 32px #00eaff44, 0 2px 8px #0008;
+    }
+    body.dark-mode .btn, body.dark-mode .clear-btn {
+      background: linear-gradient(90deg, #23232b 40%, #00eaff 100%);
+      color: #fff;
+      border: 2px solid #00eaff;
+    }
+    body.dark-mode .btn:hover, body.dark-mode .clear-btn:hover {
+      background: linear-gradient(90deg, #00eaff 40%, #23232b 100%);
+      color: #fff;
+      border: 2px solid #6c63ff;
+    }
+    body.dark-mode .favorite-chip {
+      background: linear-gradient(90deg, #23232b 60%, #6c63ff33 100%);
+      color: #ffd700;
+      border: 1.5px solid #333;
+    }
+
+    /* Dark mode toggle bouton */
+    .dark-toggle {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: none;
+      border: none;
+      color: #ffd700;
+      font-size: 1.7rem;
+      cursor: pointer;
+      z-index: 10;
+      transition: color 0.2s, transform 0.15s;
+    }
+    .dark-toggle:hover {
+      color: #fff;
+      transform: scale(1.15) rotate(-8deg);
+      text-shadow: 0 0 8px #ffd70099;
+    }
+
+    /* Feedback utilisateur */
+    .feedback-msg {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #23232b;
+      color: #00eaff;
+      padding: 0.8rem 2rem;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      box-shadow: 0 4px 24px #00eaff55;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .feedback-msg.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .feedback-msg.error {
+      color: #ff4b5c;
+      background: #2b1818;
+      box-shadow: 0 4px 24px #ff4b5c55;
+    }
   </style>
 </head>
 <body>
+  <!-- Bouton dark mode -->
+  <button class="dark-toggle" id="darkToggle" title="Basculer le mode sombre"><i class="fa-solid fa-moon"></i></button>
   <header>
+    <i class="fa-brands fa-twitch" style="color:#a970ff;margin-right:0.5rem;"></i>
     Virus MultiTwitch Viewer
   </header>
   <div id="controls">
     <input type="text" id="streamerInput" placeholder="Nom du streamer Twitch" autocomplete="off" autofocus>
-    <button class="btn" onclick="addStreamer()">Ajouter</button>
-    <button class="clear-btn" onclick="clearAll()">Tout supprimer</button>
-    <button class="fav-btn" id="favBtn" title="Ajouter aux favoris">&#9734;</button>
+    <button class="btn" onclick="addStreamer()"><i class="fa-solid fa-plus"></i> Ajouter</button>
+    <button class="clear-btn" onclick="clearAll()"><i class="fa-solid fa-trash"></i> Tout supprimer</button>
+    <button class="fav-btn" id="favBtn" title="Ajouter aux favoris"><i class="fa-regular fa-star"></i></button>
     <div id="favorites-title" style="display:none;">Favoris :</div>
     <div id="favorites"></div>
     <div id="errorMsg" class="error-msg"></div>
   </div>
   <div id="streams"></div>
   <footer>
-    <span>VirusDEV &copy; 2025 — Simpleee, animé, et pratique pour suivre tes streamers favoris !</span>
+    <span><i class="fa-solid fa-heart" style="color:#ff4b5c;"></i> VirusDEV &copy; 2025 — Simpleee, animé, et pratique pour suivre tes streamers favoris !</span>
   </footer>
+  <!-- Feedback utilisateur -->
+  <div id="feedbackMsg" class="feedback-msg"></div>
   <script>
     const parent = location.hostname;
     let favorites = JSON.parse(localStorage.getItem('twitchFavorites') || '[]');
 
+    // Feedback utilisateur
+    function showFeedback(msg, isError = false) {
+      const feedback = document.getElementById('feedbackMsg');
+      feedback.textContent = msg;
+      feedback.className = 'feedback-msg' + (isError ? ' error' : '');
+      feedback.classList.add('show');
+      setTimeout(() => {
+        feedback.classList.remove('show');
+      }, 1800);
+    }
+
     function showError(msg) {
+      showFeedback(msg, true);
+      // Pour compatibilité avec l'ancien système d'erreur
       const errorDiv = document.getElementById('errorMsg');
       errorDiv.textContent = msg;
       errorDiv.style.display = 'block';
@@ -416,9 +523,11 @@
         container.innerHTML = `
           <div class="stream-header">
             <span class="stream-title">${streamer}
-              <button class="stream-fav-btn${favorites.includes(streamer) ? ' faved' : ''}" title="Ajouter/Retirer des favoris" onclick="toggleFavorite('${streamer}');event.stopPropagation();">${favorites.includes(streamer) ? '&#9733;' : '&#9734;'}</button>
+              <button class="stream-fav-btn${favorites.includes(streamer) ? ' faved' : ''}" title="Ajouter/Retirer des favoris" onclick="toggleFavorite('${streamer}');event.stopPropagation();">
+                <i class="fa${favorites.includes(streamer) ? 's' : 'r'} fa-star"></i>
+              </button>
             </span>
-            <button class="remove-btn" onclick="removeStreamer('${streamer}')">✖</button>
+            <button class="remove-btn" onclick="removeStreamer('${streamer}')"><i class="fa-solid fa-xmark"></i></button>
           </div>
           <iframe
             class="stream-player"
@@ -429,16 +538,21 @@
         document.getElementById('streams').appendChild(container);
         input.value = '';
         input.focus();
+        showFeedback('Stream ajouté !');
       }
     }
 
     function removeStreamer(streamer) {
       const el = document.getElementById('stream-' + streamer);
-      if (el) el.remove();
+      if (el) {
+        el.remove();
+        showFeedback('Stream supprimé');
+      }
     }
 
     function clearAll() {
       document.getElementById('streams').innerHTML = '';
+      showFeedback('Tous les streams ont été supprimés');
     }
 
     // Favoris
@@ -448,10 +562,10 @@
       const streamer = input.value.trim().toLowerCase();
       if (streamer && favorites.includes(streamer)) {
         favBtn.classList.add('faved');
-        favBtn.innerHTML = '&#9733;';
+        favBtn.innerHTML = '<i class="fa-solid fa-star"></i>';
       } else {
         favBtn.classList.remove('faved');
-        favBtn.innerHTML = '&#9734;';
+        favBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
       }
     }
 
@@ -463,14 +577,19 @@
         localStorage.setItem('twitchFavorites', JSON.stringify(favorites));
         renderFavorites();
         updateFavBtn();
+        showFeedback('Ajouté aux favoris !');
+      } else if (favorites.includes(streamer)) {
+        showFeedback('Déjà dans les favoris', true);
       }
     }
 
     function toggleFavorite(streamer) {
       if (favorites.includes(streamer)) {
         favorites = favorites.filter(fav => fav !== streamer);
+        showFeedback('Retiré des favoris');
       } else {
         favorites.push(streamer);
+        showFeedback('Ajouté aux favoris !');
       }
       localStorage.setItem('twitchFavorites', JSON.stringify(favorites));
       renderFavorites();
@@ -480,10 +599,10 @@
       if (favBtn) {
         if (favorites.includes(streamer)) {
           favBtn.classList.add('faved');
-          favBtn.innerHTML = '&#9733;';
+          favBtn.innerHTML = '<i class="fa-solid fa-star"></i>';
         } else {
           favBtn.classList.remove('faved');
-          favBtn.innerHTML = '&#9734;';
+          favBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
         }
       }
     }
@@ -493,11 +612,12 @@
       localStorage.setItem('twitchFavorites', JSON.stringify(favorites));
       renderFavorites();
       updateFavBtn();
+      showFeedback('Retiré des favoris');
       // Met à jour l'étoile sur la carte si ouverte
       const favBtn = document.querySelector(`#stream-${streamer} .stream-fav-btn`);
       if (favBtn) {
         favBtn.classList.remove('faved');
-        favBtn.innerHTML = '&#9734;';
+        favBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
       }
     }
 
@@ -511,8 +631,8 @@
           const chip = document.createElement('div');
           chip.className = 'favorite-chip';
           chip.innerHTML = `
-            <span onclick="addStreamer('${fav}')">${fav}</span>
-            <button class="remove-fav" title="Retirer des favoris" onclick="removeFavorite('${fav}');event.stopPropagation();">&times;</button>
+            <span onclick="addStreamer('${fav}')"><i class="fa-brands fa-twitch"></i> ${fav}</span>
+            <button class="remove-fav" title="Retirer des favoris" onclick="removeFavorite('${fav}');event.stopPropagation();"><i class="fa-solid fa-xmark"></i></button>
           `;
           favDiv.appendChild(chip);
         });
@@ -530,11 +650,26 @@
     document.getElementById('streamerInput').addEventListener('input', updateFavBtn);
     document.getElementById('favBtn').addEventListener('click', addToFavorites);
 
-    // Focus auto sur l'input au chargement
+    // Dark mode toggle
+    document.getElementById('darkToggle').addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+      // Change icon
+      this.innerHTML = document.body.classList.contains('dark-mode')
+        ? '<i class="fa-solid fa-sun"></i>'
+        : '<i class="fa-solid fa-moon"></i>';
+      // Sauvegarde le choix
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? '1' : '0');
+    });
+
+    // Appliquer dark mode au chargement si activé
     window.onload = () => {
       document.getElementById('streamerInput').focus();
       renderFavorites();
       updateFavBtn();
+      if (localStorage.getItem('darkMode') === '1') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkToggle').innerHTML = '<i class="fa-solid fa-sun"></i>';
+      }
     };
 
     // Pour accès depuis HTML
