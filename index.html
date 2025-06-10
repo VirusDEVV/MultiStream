@@ -3,10 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Virus MultiTwitch</title>
+  <title>Virus MultiStream </title>
   <link rel="icon" type="image/png" href="https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -18,468 +16,315 @@
       --accent: #ff4b5c;
       --gold: #ffd700;
       --bg-gradient: linear-gradient(120deg, #23232b 0%, #18181b 100%);
-      --neon: 0 0 16px #9147ff, 0 0 32px #00eaff99;
     }
     body {
       font-family: 'Montserrat', Arial, sans-serif;
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      background: radial-gradient(ellipse at 60% 10%, #9147ff44 0%, transparent 70%),
-                  radial-gradient(ellipse at 20% 80%, #00eaff33 0%, transparent 70%),
-                  linear-gradient(120deg, #23232b 0%, #18181b 100%);
+      background: var(--bg-gradient);
       color: #f5f5f7;
-      overflow-x: hidden;
-      animation: bgmove 18s linear infinite alternate;
-    }
-    @keyframes bgmove {
-      0% { background-position: 0 0, 0 0, 0 0; }
-      100% { background-position: 100vw 100vh, 100vw 0, 0 0; }
-    }
-    header {
-      background: linear-gradient(90deg, #9147ff 0%, #00eaff 100%);
-      color: #fff;
-      padding: 2.5rem 1rem 1.5rem 1rem;
-      text-align: center;
-      font-size: 2.7rem;
-      font-family: 'Orbitron', 'Montserrat', Arial, sans-serif;
-      font-weight: 700;
-      letter-spacing: 3px;
-      border-bottom: 4px solid #00eaff;
-      box-shadow: 0 2px 32px #9147ff55, 0 2px 8px #00eaff44;
-      user-select: none;
-      text-shadow: 0 0 24px #9147ff, 0 0 32px #00eaff99;
-      position: relative;
-      z-index: 2;
-      border-radius: 0 0 32px 32px;
-      animation: neon-flicker 2s infinite alternate;
-    }
-    @keyframes neon-flicker {
-      0% { text-shadow: 0 0 24px #9147ff, 0 0 32px #00eaff99; }
-      100% { text-shadow: 0 0 48px #9147ff, 0 0 64px #00eaff; }
-    }
-    #controls {
-      padding: 2.2rem 1rem 1.2rem 1rem;
-      text-align: center;
-      background: linear-gradient(120deg, #23232b 80%, #9147ff22 100%);
-      border-radius: 0 0 32px 32px;
-      margin-bottom: 2.2rem;
-      box-shadow: 0 4px 32px #9147ff33;
-      position: relative;
-      animation: fadeIn 1s;
-      z-index: 2;
-      border-bottom: 2px solid #00eaff;
-    }
-    #streamerInput {
-      padding: 1.1rem 1.5rem;
-      font-size: 1.25rem;
-      border: none;
-      border-radius: 16px;
-      margin-right: 0.7rem;
-      width: 260px;
-      background: #18181b;
-      color: #fff;
-      outline: none;
-      box-shadow: 0 2px 12px #9147ff33, 0 2px 8px #00eaff22;
-      border: 2px solid #23232b;
-      transition: box-shadow 0.2s, border 0.2s;
-      font-family: 'Montserrat', Arial, sans-serif;
-    }
-    #streamerInput:focus {
-      box-shadow: 0 2px 24px #9147ff99, 0 2px 8px #00eaff99;
-      border: 2px solid #9147ff;
-      background: #23232b;
-    }
-    .btn, .clear-btn {
-      padding: 1.1rem 1.7rem;
-      font-size: 1.25rem;
-      border: none;
-      border-radius: 16px;
-      background: linear-gradient(90deg, #9147ff 40%, #00eaff 100%);
-      color: #fff;
-      cursor: pointer;
-      font-weight: bold;
-      letter-spacing: 1px;
-      transition: background 0.2s, transform 0.1s, box-shadow 0.2s, color 0.2s;
-      margin-left: 0.2rem;
-      box-shadow: 0 2px 16px #9147ff33, 0 2px 8px #00eaff33;
-      position: relative;
-      overflow: hidden;
-      border: 2px solid #23232b;
-    }
-    .btn:hover, .clear-btn:hover {
-      background: linear-gradient(90deg, #00eaff 40%, #9147ff 100%);
-      transform: scale(1.09) rotate(-2deg);
-      box-shadow: 0 6px 36px #00eaffaa, 0 2px 8px #9147ff99;
-      color: #fff;
-      border: 2px solid #00eaff;
-    }
-    .fav-btn {
-      background: none;
-      border: none;
-      color: var(--gold);
-      font-size: 2rem;
-      cursor: pointer;
-      vertical-align: middle;
-      margin-left: 0.2rem;
-      transition: color 0.2s, transform 0.15s;
-      outline: none;
-      position: relative;
-      filter: drop-shadow(0 0 6px #ffd70055);
-    }
-    .fav-btn.faved {
-      color: #ffd700;
-      text-shadow: 0 0 16px #ffd70099;
-      transform: scale(1.25) rotate(-8deg);
-      animation: popStar 0.4s;
-    }
-    @keyframes popStar {
-      0% { transform: scale(1) rotate(0);}
-      60% { transform: scale(1.3) rotate(-18deg);}
-      100% { transform: scale(1.25) rotate(-8deg);}
-    }
-    .fav-btn:hover {
-      color: #ffd700;
-      transform: scale(1.15) rotate(-8deg);
-    }
-    .favorites-bar {
+      transition: background 0.4s;
       display: flex;
-      align-items: center;
-      gap: 1.2rem;
-      background: linear-gradient(90deg, #23232b 70%, #9147ff33 100%);
-      border-radius: 20px;
-      padding: 1rem 1.5rem;
-      margin: 1.5rem auto 2rem auto;
-      box-shadow: 0 2px 16px #9147ff22;
-      max-width: 950px;
-      min-height: 60px;
-      position: relative;
-      animation: fadeIn 1.2s;
-      border: 1.5px solid #9147ff55;
+      flex-direction: column;
+      min-height: 100vh;
     }
-    .favorites-label {
-      color: #ffd700;
+    .main-layout {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+    /* Volet déroulant */
+    .aside-toggle {
+      position: fixed;
+      top: 90px;
+      left: 0;
+      z-index: 100;
+      background: var(--main3);
+      color: var(--gold);
+      border: none;
+      border-radius: 0 16px 16px 0;
+      font-size: 2rem;
+      padding: 0.5rem 0.7rem;
+      cursor: pointer;
+      box-shadow: 2px 2px 12px #9147ff33;
+      transition: background 0.2s, color 0.2s;
+    }
+    .aside-toggle:hover {
+      background: var(--main2);
+      color: #23232b;
+    }
+    aside {
+      width: 320px;
+      min-width: 220px;
+      background: #1a1a22;
+      border-right: 2px solid #23232b;
+      padding: 2rem 1rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      box-shadow: 4px 0 24px #9147ff11;
+      z-index: 2;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(.77,0,.18,1);
+    }
+    aside.open {
+      transform: translateX(0);
+    }
+    .fav-category-title {
+      font-size: 1.1rem;
       font-weight: bold;
-      font-size: 1.2rem;
-      letter-spacing: 1px;
+      color: var(--main2);
+      margin-bottom: 0.7rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      text-shadow: 0 0 12px #ffd70055;
+      letter-spacing: 1px;
       font-family: 'Orbitron', 'Montserrat', Arial, sans-serif;
     }
     .favorites-list {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-      align-items: center;
-      margin-left: 0.7rem;
-      flex: 1;
+      flex-direction: column;
+      gap: 0.5rem;
     }
     .favorite-pill {
       display: flex;
       align-items: center;
-      background: linear-gradient(90deg, #35354a 60%, #9147ff33 100%);
-      color: #ffd700;
-      border-radius: 22px;
-      padding: 0.45rem 1.3rem 0.45rem 1.1rem;
-      font-size: 1.13rem;
-      font-weight: 700;
+      background: #23232b;
+      color: var(--gold);
+      border-radius: 16px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
-      border: 2px solid #9147ff77;
-      transition: background 0.2s, border 0.2s, color 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 12px #9147ff22;
+      border: 1.5px solid #333;
+      transition: background 0.2s, border 0.2s, color 0.2s;
+      box-shadow: 0 2px 8px #9147ff11;
       user-select: none;
+      gap: 0.7rem;
       position: relative;
-      opacity: 0.96;
-      animation: fadeIn 0.7s;
-      letter-spacing: 1px;
-      text-shadow: 0 0 8px #ffd70044;
     }
     .favorite-pill:hover {
-      background: linear-gradient(90deg, #9147ff 60%, #35354a 100%);
-      color: #fff;
-      border: 2px solid #00eaff;
-      opacity: 1;
-      box-shadow: 0 4px 16px #00eaff77;
+      background: var(--main2);
+      color: #23232b;
+      border: 1.5px solid var(--main);
     }
     .favorite-pill .pill-remove {
-      margin-left: 0.8rem;
-      color: #ff4b5c;
-      font-size: 1.2rem;
+      margin-left: auto;
+      color: var(--accent);
+      font-size: 1.1rem;
       background: none;
       border: none;
       cursor: pointer;
-      transition: color 0.2s, background 0.2s;
+      transition: color 0.2s;
       outline: none;
       padding: 0 0.2rem;
       border-radius: 50%;
     }
     .favorite-pill .pill-remove:hover {
       color: #fff;
-      background: #ff4b5c;
+      background: var(--accent);
     }
     .favorite-pill .pill-twitch {
-      margin-right: 0.7rem;
-      color: #9147ff;
-      font-size: 1.2rem;
-      text-shadow: 0 0 8px #9147ff88;
-    }
-    .error-msg {
-      color: #ff4b5c;
-      font-weight: bold;
-      margin-top: 1rem;
+      color: var(--main);
       font-size: 1.1rem;
-      letter-spacing: 1px;
-      display: none;
-      animation: shake 0.4s;
     }
-    @keyframes shake {
-      0% { transform: translateX(0);}
-      25% { transform: translateX(-8px);}
-      50% { transform: translateX(8px);}
-      75% { transform: translateX(-8px);}
-      100% { transform: translateX(0);}
+    header {
+      background: none;
+      color: var(--main);
+      padding: 2.5rem 1rem 1.5rem 1rem;
+      text-align: center;
+      font-size: 2.5rem;
+      font-family: 'Orbitron', 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
+      letter-spacing: 2px;
+      border-bottom: 1px solid #333;
+      margin-bottom: 1.5rem;
+      user-select: none;
+      text-shadow: 0 2px 12px #9147ff33;
+      position: relative;
+      /* Animation néon */
+      animation: neon-flicker 2s infinite alternate;
+    }
+    @keyframes neon-flicker {
+      0% { text-shadow: 0 0 24px #9147ff, 0 0 32px #00eaff99; }
+      100% { text-shadow: 0 0 48px #9147ff, 0 0 64px #00eaff; }
+    }
+    .dark-toggle {
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      background: none;
+      border: none;
+      color: var(--main2);
+      font-size: 2rem;
+      cursor: pointer;
+      transition: color 0.2s, transform 0.15s;
+    }
+    .dark-toggle:hover {
+      color: var(--main);
+      transform: scale(1.1) rotate(-8deg);
+    }
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      margin-left: 0;
+      transition: margin-left 0.35s cubic-bezier(.77,0,.18,1);
+    }
+    .content.shifted {
+      margin-left: 320px;
+    }
+    #controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      background: none;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    #streamerInput {
+      padding: 0.9rem 1.2rem;
+      font-size: 1.1rem;
+      border: 1.5px solid #333;
+      border-radius: 12px;
+      background: #18181b;
+      color: #fff;
+      outline: none;
+      width: 220px;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+    #streamerInput:focus {
+      border: 1.5px solid var(--main2);
+      box-shadow: 0 2px 16px #00eaff33;
+    }
+    .btn, .clear-btn {
+      padding: 0.9rem 1.3rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 12px;
+      background: var(--main);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover, .clear-btn:hover {
+      background: var(--main2);
+      color: #23232b;
+      transform: scale(1.07);
+    }
+    .fav-btn {
+      background: none;
+      border: none;
+      color: var(--gold);
+      font-size: 1.7rem;
+      cursor: pointer;
+      margin-left: 0.2rem;
+      transition: color 0.2s, transform 0.15s;
+      outline: none;
+    }
+    .fav-btn.faved {
+      color: var(--gold);
+      transform: scale(1.15) rotate(-8deg);
+    }
+    .fav-btn:hover {
+      color: var(--main2);
     }
     #streams {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
-      gap: 40px;
-      padding: 2.8rem 2vw;
-      max-width: 1800px;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 32px;
+      padding: 2rem 2vw;
+      max-width: 1400px;
       margin: auto;
-      animation: fadeIn 1.2s;
     }
     .stream-container {
-      background: linear-gradient(120deg, #23232b 80%, #9147ff22 100%);
-      border-radius: 28px;
-      box-shadow: 0 8px 32px #9147ff44, 0 2px 8px #00eaff44;
-      padding: 1.5rem 1.2rem 2rem 1.2rem;
-      position: relative;
+      background: #18181b;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #9147ff22;
+      padding: 1.2rem 1rem 1.5rem 1rem;
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      transition: box-shadow 0.3s, transform 0.2s, border 0.2s;
-      border: 2.5px solid #9147ff33;
-      animation: fadeInUp 0.7s;
-      overflow: hidden;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0;}
-      to { opacity: 1;}
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(40px) scale(0.95);}
-      to { opacity: 1; transform: translateY(0) scale(1);}
+      border: 1.5px solid #23232b;
+      transition: box-shadow 0.2s, border 0.2s, transform 0.2s;
     }
     .stream-container:hover {
-      box-shadow: 0 12px 48px #00eaff77, 0 2px 8px #9147ff99;
-      border: 2.5px solid #00eaff;
-      transform: translateY(-8px) scale(1.04);
+      box-shadow: 0 8px 32px #00eaff44;
+      border: 1.5px solid var(--main2);
+      transform: translateY(-4px) scale(1.02);
     }
     .stream-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1rem;
+      margin-bottom: 0.7rem;
     }
     .stream-title {
-      font-size: 1.45rem;
+      font-size: 1.2rem;
       font-weight: bold;
       color: #fff;
       letter-spacing: 1px;
       text-transform: capitalize;
       display: flex;
       align-items: center;
-      gap: 0.7rem;
-      text-shadow: 0 0 12px #9147ff55;
+      gap: 0.5rem;
       font-family: 'Orbitron', 'Montserrat', Arial, sans-serif;
     }
     .stream-fav-btn {
       background: none;
       border: none;
-      color: #ffd700;
-      font-size: 1.4rem;
+      color: var(--gold);
+      font-size: 1.2rem;
       cursor: pointer;
       margin-left: 0.2rem;
       transition: color 0.2s, transform 0.15s;
       outline: none;
       padding: 0;
-      filter: drop-shadow(0 0 6px #ffd70055);
     }
     .stream-fav-btn.faved {
-      color: #ffd700;
-      text-shadow: 0 0 12px #ffd70099;
-      transform: scale(1.18) rotate(-8deg);
-      animation: popStar 0.4s;
-    }
-    .stream-fav-btn:hover {
-      color: #ffd700;
+      color: var(--gold);
       transform: scale(1.1) rotate(-8deg);
     }
+    .stream-fav-btn:hover {
+      color: var(--main2);
+    }
     .remove-btn {
-      background: #ff4b5c;
+      background: var(--accent);
       color: #fff;
       border: none;
-      border-radius: 10px;
-      padding: 0.5rem 1.1rem;
-      font-size: 1.1rem;
+      border-radius: 8px;
+      padding: 0.4rem 1rem;
+      font-size: 1rem;
       cursor: pointer;
       font-weight: bold;
       transition: background 0.2s, transform 0.1s;
-      box-shadow: 0 2px 8px #ff4b5c33;
+      box-shadow: 0 2px 8px #ff4b5c22;
       letter-spacing: 1px;
     }
     .remove-btn:hover {
       background: #ff1a40;
       color: #fff;
-      transform: scale(1.12);
-      box-shadow: 0 4px 16px #ff4b5c99;
+      transform: scale(1.08);
     }
     .stream-player {
       width: 100%;
       aspect-ratio: 16/9;
-      min-height: 650px;
-      max-height: 96vh;
+      min-height: 320px;
+      max-height: 70vh;
       border: none;
-      border-radius: 22px;
+      border-radius: 12px;
       margin-bottom: 0.5rem;
-      box-shadow: 0 2px 32px #9147ff33, 0 2px 8px #00eaff33;
-      transition: box-shadow 0.2s;
-      outline: 2.5px solid #9147ff44;
-      outline-offset: -4px;
-      animation: rgb-glow 3s linear infinite alternate;
+      box-shadow: 0 2px 16px #9147ff22;
       background: none;
-    }
-    @keyframes rgb-glow {
-      0% { box-shadow: 0 2px 32px #9147ff33; outline-color: #9147ff44;}
-      50% { box-shadow: 0 4px 64px #00eaff99; outline-color: #00eaff99;}
-      100% { box-shadow: 0 2px 32px #9147ff33; outline-color: #9147ff44;}
-    }
-    footer {
-      background: linear-gradient(90deg, #23232b 80%, #9147ff22 100%);
-      color: #fff;
-      text-align: center;
-      padding: 1.5rem 0;
-      border-top: 2.5px solid #9147ff;
-      margin-top: 2.5rem;
-      font-size: 1.15rem;
-      letter-spacing: 1px;
-      box-shadow: 0 -2px 24px #9147ff33;
-      animation: fadeInUp 1.2s;
-      border-radius: 32px 32px 0 0;
-      font-family: 'Montserrat', Arial, sans-serif;
-    }
-    ::-webkit-scrollbar {
-      width: 10px;
-      background: #23232b;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #9147ff 0%, #00eaff 100%);
-      border-radius: 8px;
-    }
-    @media (max-width: 1200px) {
-      #streams {
-        grid-template-columns: 1fr;
-        padding: 1rem 0.5rem;
-      }
-      .stream-player {
-        min-height: 350px;
-      }
-      .stream-container {
-        padding: 0.7rem 0.5rem 1rem 0.5rem;
-      }
-    }
-    @media (max-width: 700px) {
-      .favorites-bar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.5rem;
-        padding: 0.7rem 0.5rem;
-      }
-      .favorites-list {
-        margin-left: 0;
-        justify-content: flex-start;
-      }
-      .stream-player {
-        min-height: 180px;
-      }
-    }
-    @media (max-width: 600px) {
-      header {
-        font-size: 1.1rem;
-        padding: 1.2rem 0.5rem 0.7rem 0.5rem;
-      }
-      #controls {
-        padding: 1rem 0.5rem 0.5rem 0.5rem;
-      }
-      #streamerInput {
-        width: 100px;
-        font-size: 1rem;
-      }
-      .btn, .clear-btn {
-        font-size: 1rem;
-        padding: 0.6rem 1rem;
-      }
-    }
-    body.dark-mode {
-      background: radial-gradient(ellipse at 60% 10%, #23232b 0%, transparent 70%),
-                  radial-gradient(ellipse at 20% 80%, #18181b 0%, transparent 70%),
-                  linear-gradient(120deg, #18181b 0%, #23232b 100%);
-      color: #e0e0e0;
-    }
-    body.dark-mode header,
-    body.dark-mode footer,
-    body.dark-mode #controls {
-      background: linear-gradient(90deg, #18181b 80%, #23232b 100%);
-      color: #e0e0e0;
-      border-color: #00eaff;
-    }
-    body.dark-mode .stream-container {
-      background: linear-gradient(120deg, #18181b 80%, #23232b 100%);
-      box-shadow: 0 8px 32px #00eaff44, 0 2px 8px #0008;
-    }
-    body.dark-mode .btn, body.dark-mode .clear-btn {
-      background: linear-gradient(90deg, #23232b 40%, #00eaff 100%);
-      color: #fff;
-      border: 2px solid #00eaff;
-    }
-    body.dark-mode .btn:hover, body.dark-mode .clear-btn:hover {
-      background: linear-gradient(90deg, #00eaff 40%, #23232b 100%);
-      color: #fff;
-      border: 2px solid #9147ff;
-    }
-    body.dark-mode .favorites-bar {
-      background: linear-gradient(90deg, #18181b 70%, #23232b 100%);
-      box-shadow: 0 2px 16px #00eaff22;
-    }
-    body.dark-mode .favorite-pill {
-      background: linear-gradient(90deg, #23232b 60%, #9147ff33 100%);
-      color: #ffd700;
-      border: 2px solid #333;
-    }
-    body.dark-mode .favorite-pill:hover {
-      background: linear-gradient(90deg, #9147ff 60%, #23232b 100%);
-      color: #fff;
-      border: 2px solid #00eaff;
-    }
-    .dark-toggle {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      background: none;
-      border: none;
-      color: #ffd700;
-      font-size: 2.1rem;
-      cursor: pointer;
-      z-index: 10;
-      transition: color 0.2s, transform 0.15s;
-      text-shadow: 0 0 12px #ffd70099;
-    }
-    .dark-toggle:hover {
-      color: #fff;
-      transform: scale(1.15) rotate(-8deg);
-      text-shadow: 0 0 16px #ffd700cc;
     }
     .feedback-msg {
       position: fixed;
@@ -487,12 +332,12 @@
       left: 50%;
       transform: translateX(-50%);
       background: #23232b;
-      color: #00eaff;
-      padding: 0.8rem 2rem;
-      border-radius: 16px;
-      font-size: 1.1rem;
+      color: var(--main2);
+      padding: 0.7rem 1.7rem;
+      border-radius: 12px;
+      font-size: 1rem;
       font-weight: bold;
-      box-shadow: 0 4px 24px #00eaff55;
+      box-shadow: 0 4px 24px #00eaff33;
       z-index: 9999;
       opacity: 0;
       pointer-events: none;
@@ -503,232 +348,519 @@
       pointer-events: auto;
     }
     .feedback-msg.error {
-      color: #ff4b5c;
+      color: var(--accent);
       background: #2b1818;
-      box-shadow: 0 4px 24px #ff4b5c55;
+      box-shadow: 0 4px 24px #ff4b5c33;
+    }
+    footer {
+      background: none;
+      color: #888;
+      text-align: center;
+      padding: 1.2rem 0 0.7rem 0;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      margin-top: 2.5rem;
+      font-family: 'Montserrat', Arial, sans-serif;
+    }
+    @media (max-width: 900px) {
+      .main-layout {
+        flex-direction: column;
+      }
+      aside {
+        width: 100%;
+        min-width: 0;
+        border-right: none;
+        border-bottom: 2px solid #23232b;
+        flex-direction: row;
+        gap: 1.5rem;
+        overflow-x: auto;
+        padding: 1rem 0.5rem;
+        height: auto;
+        position: static;
+        transform: none !important;
+      }
+      .content.shifted {
+        margin-left: 0;
+      }
+      .aside-toggle {
+        top: 70px;
+      }
+    }
+    @media (max-width: 700px) {
+      #controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.7rem;
+        padding: 0.7rem 0.5rem;
+      }
+      #streams {
+        grid-template-columns: 1fr;
+        padding: 1rem 0.5rem;
+      }
+      .stream-player {
+        min-height: 180px;
+      }
+    }
+    body.dark-mode {
+      background: linear-gradient(120deg, #18181b 0%, #23232b 100%);
+      color: #e0e0e0;
+    }
+    body.dark-mode aside {
+      background: #18181b;
+      border-color: #23232b;
+    }
+    body.dark-mode .favorite-pill {
+      background: #23232b;
+      color: var(--gold);
+      border: 1.5px solid #333;
+    }
+    body.dark-mode .favorite-pill:hover {
+      background: var(--main2);
+      color: #23232b;
+      border: 1.5px solid var(--main);
+    }
+    body.dark-mode .stream-container {
+      background: #23232b;
+      box-shadow: 0 8px 32px #00eaff22;
+    }
+    body.dark-mode .btn, body.dark-mode .clear-btn {
+      background: var(--main2);
+      color: #23232b;
+    }
+    body.dark-mode .btn:hover, body.dark-mode .clear-btn:hover {
+      background: var(--main);
+      color: #fff;
     }
   </style>
 </head>
 <body>
+  <button class="aside-toggle" id="asideToggle" title="Afficher les favoris"><i class="fa-solid fa-star"></i></button>
   <button class="dark-toggle" id="darkToggle" title="Basculer le mode sombre"><i class="fa-solid fa-moon"></i></button>
   <header>
-    <i class="fa-brands fa-twitch" style="color:#fff;margin-right:0.7rem;font-size:2.2rem;text-shadow:0 0 16px #9147ff;"></i>
-    Virus MultiTwitch Viewer
+    <i class="fa-brands fa-twitch" style="color:#9147ff;margin-right:0.7rem;font-size:2.2rem;"></i>
+    <span id="animatedTitle">Virus MultiStream</span>
   </header>
-  <div id="controls">
-    <input type="text" id="streamerInput" placeholder="Nom du streamer Twitch" autocomplete="off" autofocus>
-    <button class="btn" onclick="addStreamer()"><i class="fa-solid fa-plus"></i> Ajouter</button>
-    <button class="clear-btn" onclick="clearAll()"><i class="fa-solid fa-trash"></i> Tout supprimer</button>
-    <button class="fav-btn" id="favBtn" title="Ajouter aux favoris"><i class="fa-regular fa-star"></i></button>
-    <div class="favorites-bar" id="favorites-bar">
-      <span class="favorites-label"><i class="fa-solid fa-star"></i> Favoris</span>
-      <div id="favorites-list" class="favorites-list"></div>
+  <div class="main-layout">
+    <aside id="favorites-aside">
+      <!-- Les favoris seront générés ici -->
+    </aside>
+    <div class="content" id="mainContent">
+      <div id="controls">
+        <input type="text" id="streamerInput" placeholder="Nom du streamer Twitch" autocomplete="off" autofocus>
+        <button class="btn" onclick="addStreamer()"><i class="fa-solid fa-plus"></i> Ajouter</button>
+        <button class="clear-btn" onclick="clearAll()"><i class="fa-solid fa-trash"></i> Tout supprimer</button>
+        <button class="fav-btn" id="favBtn" title="Ajouter aux favoris"><i class="fa-regular fa-star"></i></button>
+      </div>
+      <div id="streams">
+        <div id="welcome" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;opacity:0.85;">
+          <div style="font-size:2.2rem;font-family:'Orbitron',sans-serif;color:#9147ff;text-shadow:0 0 24px #9147ff88;animation:fadeInUp 1.2s;">
+            👋 Bienvenue sur <span style="color:#00eaff;">Virus MultiStream</span> !
+          </div>
+          <div style="margin:1.5rem 0 1rem 0;font-size:1.2rem;color:#fff;max-width:500px;text-align:center;">
+            Ajoute tes streamers favoris à gauche ou découvre des chaînes populaires en cliquant sur les boutons ci-dessous.:
+          </div>
+          <div style="display:flex;gap:1rem;">
+            <button onclick="addStreamer('TwincyTV')" style="background:#9147ff;color:#fff;border:none;border-radius:12px;padding:0.7rem 1.3rem;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 12px #9147ff33;">🎮 TwincyTV</button>
+            <button onclick="addStreamer('Aenot')" style="background:#00eaff;color:#23232b;border:none;border-radius:12px;padding:0.7rem 1.3rem;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 12px #00eaff33;">⚡ Aenot</button>
+            <button onclick="addStreamer('Khadim')" style="background:#474aff;color:#fff;border:none;border-radius:12px;padding:0.7rem 1.3rem;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 12px #9147ff33;">🎮 Khadim</button>
+            <button onclick="addStreamer('JLTomy')" style="background:#ffd700;color:#23232b;border:none;border-radius:12px;padding:0.7rem 1.3rem;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 12px #ffd70033;">⭐ JLTomy</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="errorMsg" class="error-msg"></div>
   </div>
-  <div id="streams"></div>
   <footer>
     <span><i class="fa-solid fa-heart" style="color:#ff4b5c;"></i> VirusDEV &copy; 2025 — <span style="color:#00eaff">Création stylée pour la commu Twitch !</span></span>
   </footer>
   <div id="feedbackMsg" class="feedback-msg"></div>
+  <!-- Petit badge Discord flottant en bas à droite -->
+  <div id="discord-badge"
+       style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;align-items:center;gap:0.5rem;background:#23232bcc;color:#fff;padding:0.5rem 1rem;border-radius:16px;box-shadow:0 2px 12px #7289da44;font-size:1rem;">
+    <i class="fa-brands fa-discord" style="color:#7289da;font-size:1.5rem;"></i>
+    <span id="discordTagSmall" style="font-weight:bold;letter-spacing:1px;">Virus</span>
+    <a href="https://discord.gg/TONINVITATION" target="_blank"
+       style="background:#7289da;color:#fff;border:none;border-radius:8px;padding:0.3rem 0.7rem;font-size:0.95rem;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:0.3rem;">
+      <i class="fa-brands fa-discord"></i> Serveur
+    </a>
+  </div>
   <script>
-    const parent = location.hostname;
+    // Place ces lignes en haut de ton <script> principal, avant toute utilisation de l'API Twitch
+const TWITCH_CLIENT_ID = 'gp762nuuoqcoxypju8c569th9wz7q5';
+const TWITCH_ACCESS_TOKEN = 'rndlkr12hpgft5wa7yg7qvehd1ymcv';
+const parent = location.hostname;
+const FAVORITE_CATEGORIES = [
+  { name: "Streamers FR 🇫🇷", emoji: "🇫🇷", key: "fr" }
+];
 
-    // Favoris
-    function renderFavorites() {
-      const favList = document.getElementById('favorites-list');
-      let favs = JSON.parse(localStorage.getItem('twitchFavorites') || '[]');
-      favList.innerHTML = '';
-      if (favs.length === 0) {
-        favList.innerHTML = `<span style="color:#888;font-size:1rem;">Aucun favori pour l'instant</span>`;
-        return;
+// --- UTILS ---
+function getFavorites() {
+  return JSON.parse(localStorage.getItem('twitchFavoritesV2') || '[]');
+}
+function setFavorites(favs) {
+  localStorage.setItem('twitchFavoritesV2', JSON.stringify(favs));
+}
+
+// --- TWITCH API ---
+async function getTwitchUserInfo(username) {
+  // User info
+  const userRes = await fetch(`https://api.twitch.tv/helix/users?login=${username}`, {
+    headers: {
+      'Client-ID': TWITCH_CLIENT_ID,
+      'Authorization': `Bearer ${TWITCH_ACCESS_TOKEN}`
+    }
+  });
+  const userData = await userRes.json();
+  if (!userData.data || !userData.data[0]) return null;
+  const user = userData.data[0];
+
+  // Stream info
+  const streamRes = await fetch(`https://api.twitch.tv/helix/streams?user_id=${user.id}`, {
+    headers: {
+      'Client-ID': TWITCH_CLIENT_ID,
+      'Authorization': `Bearer ${TWITCH_ACCESS_TOKEN}`
+    }
+  });
+  const streamData = await streamRes.json();
+  const isLive = streamData.data && streamData.data.length > 0;
+  const streamInfo = isLive ? streamData.data[0] : null;
+
+  // Schedule (planning)
+  let schedule = null;
+  try {
+    const schedRes = await fetch(`https://api.twitch.tv/helix/schedule?broadcaster_id=${user.id}`, {
+      headers: {
+        'Client-ID': TWITCH_CLIENT_ID,
+        'Authorization': `Bearer ${TWITCH_ACCESS_TOKEN}`
       }
-      favs.forEach(fav => {
+    });
+    const schedData = await schedRes.json();
+    if (schedData.data && schedData.data.segments && schedData.data.segments.length > 0) {
+      schedule = schedData.data.segments[0];
+    }
+  } catch (e) {}
+
+  return {
+    avatar: user.profile_image_url,
+    displayName: user.display_name,
+    isLive,
+    title: streamInfo ? streamInfo.title : '',
+    game: streamInfo ? streamInfo.game_name : '',
+    viewers: streamInfo ? streamInfo.viewer_count : 0,
+    thumbnail: streamInfo ? streamInfo.thumbnail_url.replace('{width}', '320').replace('{height}', '180') : '',
+    partner: user.broadcaster_type === "partner",
+    affiliate: user.broadcaster_type === "affiliate",
+    schedule
+  };
+}
+
+// --- NOTIFICATIONS ---
+let notifiedLive = {};
+function notifyLive(streamer, info) {
+  if (!("Notification" in window)) return;
+  if (notifiedLive[streamer]) return;
+  if (Notification.permission === "granted") {
+    new Notification(`${info.displayName} est en live !`, {
+      body: `${info.title} (${info.game})`,
+      icon: info.avatar
+    });
+    notifiedLive[streamer] = true;
+  }
+}
+
+// --- FAVORIS ---
+async function renderFavorites() {
+  const aside = document.getElementById('favorites-aside');
+  aside.innerHTML = '';
+  let favs = getFavorites();
+  // Recherche avancée : trie en ligne d'abord
+  let favsWithInfo = await Promise.all(favs.map(async fav => {
+    const info = await getTwitchUserInfo(fav.streamer);
+    return { ...fav, info };
+  }));
+  favsWithInfo.sort((a, b) => (b.info?.isLive ? 1 : 0) - (a.info?.isLive ? 1 : 0));
+  FAVORITE_CATEGORIES.forEach(cat => {
+    const catDiv = document.createElement('div');
+    catDiv.className = 'fav-category';
+    catDiv.innerHTML = `<div class="fav-category-title" style="font-family:'Orbitron',sans-serif;font-size:1.2rem;color:#fff;letter-spacing:1px;">Voici tes favoris</div>`;
+    const list = document.createElement('div');
+    list.className = 'favorites-list';
+    const catFavs = favsWithInfo.filter(f => f.category === cat.key);
+    if (catFavs.length === 0) {
+      list.innerHTML = `<span style="color:#888;font-size:1rem;">Aucun favori</span>`;
+    } else {
+      catFavs.forEach(fav => {
         const pill = document.createElement('div');
         pill.className = 'favorite-pill';
-        pill.title = `Afficher ${fav}`;
+        pill.title = `Afficher ${fav.streamer}`;
+        const info = fav.info;
         pill.innerHTML = `
-          <i class="fa-brands fa-twitch pill-twitch"></i>
-          <span class="pill-name">${fav}</span>
-          <button class="pill-remove" title="Retirer des favoris" onclick="removeFavorite('${fav}');event.stopPropagation();"><i class="fa-solid fa-xmark"></i></button>
+          <span style="display:flex;align-items:center;gap:0.5rem;">
+            <img src="${info?.avatar || 'https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png'}" alt="" style="width:24px;height:24px;border-radius:50%;border:2px solid ${info?.isLive ? '#43ff43' : '#ff4b5c'};">
+            <span class="pill-name">${info?.displayName || fav.streamer}</span>
+            ${info?.partner ? '<span title="Partenaire" style="color:#9147ff;font-size:1.2em;">✔️</span>' : info?.affiliate ? '<span title="Affiliate" style="color:#ffd700;font-size:1.2em;">★</span>' : ''}
+            <span style="width:10px;height:10px;border-radius:50%;background:${info?.isLive ? '#43ff43' : '#ff4b5c'};display:inline-block;margin-left:6px;" title="${info?.isLive ? 'En ligne' : 'Hors ligne'}"></span>
+          </span>
+          <button class="pill-remove" title="Retirer des favoris" onclick="removeFavorite('${fav.streamer}');event.stopPropagation();"><i class="fa-solid fa-xmark"></i></button>
         `;
-        pill.onclick = () => addStreamer(fav);
-        favList.appendChild(pill);
+        pill.onclick = () => addStreamer(fav.streamer);
+        list.appendChild(pill);
+
+        // Notification live
+        if (info?.isLive) notifyLive(fav.streamer, info);
       });
     }
+    catDiv.appendChild(list);
+    aside.appendChild(catDiv);
+  });
+}
 
-    function addToFavorites() {
-      const input = document.getElementById('streamerInput');
-      const streamer = input.value.trim().toLowerCase();
-      let favs = JSON.parse(localStorage.getItem('twitchFavorites') || '[]');
-      if (streamer && !favs.includes(streamer)) {
-        favs.push(streamer);
-        localStorage.setItem('twitchFavorites', JSON.stringify(favs));
-        renderFavorites();
-        updateFavBtn();
-        showFeedback('Ajouté aux favoris !');
-      } else if (favs.includes(streamer)) {
-        showFeedback('Déjà dans les favoris', true);
+// --- AJOUT STREAMER AVEC INFOS ---
+async function addStreamer(streamerName) {
+  const input = document.getElementById('streamerInput');
+  const streamer = (streamerName || input.value).trim().toLowerCase();
+  if (streamer) {
+    if (document.getElementById('stream-' + streamer)) {
+      showError('Ce streamer est déjà affiché !');
+      input.value = '';
+      return;
+    }
+    const info = await getTwitchUserInfo(streamer);
+    if (!info) {
+      showError("Streamer introuvable !");
+      return;
+    }
+    const container = document.createElement('div');
+    container.className = 'stream-container';
+    container.id = 'stream-' + streamer;
+    container.innerHTML = `
+      <div class="stream-header">
+        <span class="stream-title">
+          <img src="${info.avatar}" alt="" style="width:28px;height:28px;border-radius:50%;border:2px solid ${info.isLive ? '#43ff43' : '#ff4b5c'};margin-right:8px;">
+          ${info.displayName}
+          ${info.partner ? '<span title="Partenaire" style="color:#9147ff;font-size:1.2em;margin-left:4px;">✔️</span>' : info.affiliate ? '<span title="Affiliate" style="color:#ffd700;font-size:1.2em;margin-left:4px;">★</span>' : ''}
+          <span style="width:10px;height:10px;border-radius:50%;background:${info.isLive ? '#43ff43' : '#ff4b5c'};display:inline-block;margin-left:8px;" title="${info.isLive ? 'En ligne' : 'Hors ligne'}"></span>
+          <button class="stream-fav-btn${getFavorites().some(f => f.streamer === streamer) ? ' faved' : ''}" title="Ajouter/Retirer des favoris" onclick="toggleFavorite('${streamer}');event.stopPropagation();">
+            <i class="fa${getFavorites().some(f => f.streamer === streamer) ? 's' : 'r'} fa-star"></i>
+          </button>
+        </span>
+        <button class="remove-btn" onclick="removeStreamer('${streamer}')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <iframe
+        class="stream-player"
+        src="https://player.twitch.tv/?channel=${streamer}&parent=${parent}"
+        allowfullscreen>
+      </iframe>
+      ${info.schedule ? `<div style="margin-top:0.7rem;color:#fff;background:#23232b;padding:0.5rem 1rem;border-radius:10px;">
+        <b>Prochain live :</b> ${new Date(info.schedule.start_time).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })} — ${info.schedule.title}
+      </div>` : ''}
+    `;
+    document.getElementById('streams').appendChild(container);
+    input.value = '';
+    input.focus();
+    showFeedback('Stream ajouté !');
+    const welcome = document.getElementById('welcome');
+    if (welcome) welcome.style.display = 'none';
+  }
+}
+
+// --- AUTO-REFRESH ---
+setInterval(() => {
+  renderFavorites();
+  // Refresh les streams ouverts
+  document.querySelectorAll('.stream-container').forEach(async container => {
+    const streamer = container.id.replace('stream-', '');
+    const info = await getTwitchUserInfo(streamer);
+    if (!info) return;
+    // Met à jour le header et les infos
+    container.querySelector('.stream-title').innerHTML = `
+      <img src="${info.avatar}" alt="" style="width:28px;height:28px;border-radius:50%;border:2px solid ${info.isLive ? '#43ff43' : '#ff4b5c'};margin-right:8px;">
+      ${info.displayName}
+      ${info.partner ? '<span title="Partenaire" style="color:#9147ff;font-size:1.2em;margin-left:4px;">✔️</span>' : info.affiliate ? '<span title="Affiliate" style="color:#ffd700;font-size:1.2em;margin-left:4px;">★</span>' : ''}
+      <span style="width:10px;height:10px;border-radius:50%;background:${info.isLive ? '#43ff43' : '#ff4b5c'};display:inline-block;margin-left:8px;" title="${info.isLive ? 'En ligne' : 'Hors ligne'}"></span>
+      <button class="stream-fav-btn${getFavorites().some(f => f.streamer === streamer) ? ' faved' : ''}" title="Ajouter/Retirer des favoris" onclick="toggleFavorite('${streamer}');event.stopPropagation();">
+        <i class="fa${getFavorites().some(f => f.streamer === streamer) ? 's' : 'r'} fa-star"></i>
+      </button>
+    `;
+    // Supprime la miniature au-dessus du stream
+    let img = container.querySelector('img[alt="Miniature"]');
+    if (img) img.remove();
+    // Planning
+    let planning = container.querySelector('div[style*="Prochain live"]');
+    if (info.schedule) {
+      if (!planning) {
+        planning = document.createElement('div');
+        planning.style = "margin-top:0.7rem;color:#fff;background:#23232b;padding:0.5rem 1rem;border-radius:10px;";
+        container.appendChild(planning);
       }
+      planning.innerHTML = `<b>Prochain live :</b> ${new Date(info.schedule.start_time).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })} — ${info.schedule.title}`;
+    } else if (planning) {
+      planning.remove();
     }
+    // Notification live
+    if (info.isLive) notifyLive(streamer, info);
+  });
+}, 120000); // 2 minutes
 
-    function removeFavorite(streamer) {
-      let favs = JSON.parse(localStorage.getItem('twitchFavorites') || '[]');
-      favs = favs.filter(fav => fav !== streamer);
-      localStorage.setItem('twitchFavorites', JSON.stringify(favs));
-      renderFavorites();
-      updateFavBtn();
-      showFeedback('Retiré des favoris');
-      // Met à jour l'étoile sur la carte si ouverte
-      const favBtn = document.querySelector(`#stream-${streamer} .stream-fav-btn`);
-      if (favBtn) {
-        favBtn.classList.remove('faved');
-        favBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
-      }
+// --- RESTE DU CODE ---
+function addToFavorites() {
+  const input = document.getElementById('streamerInput');
+  const streamer = input.value.trim().toLowerCase();
+  if (!streamer) return;
+  let favs = getFavorites();
+  let catKey = "fr";
+  if (!favs.some(f => f.streamer === streamer)) {
+    favs.push({ streamer, category: catKey });
+    setFavorites(favs);
+    renderFavorites();
+    updateFavBtn();
+    showFeedback('Ajouté aux favoris !');
+  } else {
+    showFeedback('Déjà dans les favoris', true);
+  }
+}
+
+function removeFavorite(streamer) {
+  let favs = getFavorites();
+  favs = favs.filter(fav => fav.streamer !== streamer);
+  setFavorites(favs);
+  renderFavorites();
+  updateFavBtn();
+  showFeedback('Retiré des favoris');
+  const favBtn = document.querySelector(`#stream-${streamer} .stream-fav-btn`);
+  if (favBtn) {
+    favBtn.classList.remove('faved');
+    favBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
+  }
+}
+
+function updateFavBtn() {
+  const input = document.getElementById('streamerInput');
+  const favBtn = document.getElementById('favBtn');
+  const streamer = input.value.trim().toLowerCase();
+  let favs = getFavorites();
+  if (streamer && favs.some(f => f.streamer === streamer)) {
+    favBtn.classList.add('faved');
+    favBtn.innerHTML = '<i class="fa-solid fa-star"></i>';
+  } else {
+    favBtn.classList.remove('faved');
+    favBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
+  }
+}
+
+function showFeedback(msg, isError = false) {
+  const feedback = document.getElementById('feedbackMsg');
+  feedback.textContent = msg;
+  feedback.className = 'feedback-msg' + (isError ? ' error' : '');
+  feedback.classList.add('show');
+  setTimeout(() => {
+    feedback.classList.remove('show');
+  }, 1800);
+}
+
+function showError(msg) {
+  showFeedback(msg, true);
+}
+
+function removeStreamer(streamer) {
+  const el = document.getElementById('stream-' + streamer);
+  if (el) {
+    el.remove();
+    showFeedback('Stream supprimé');
+  }
+}
+
+function clearAll() {
+  document.getElementById('streams').innerHTML = '';
+  showFeedback('Tous les streams ont été supprimés');
+}
+
+function toggleFavorite(streamer) {
+  let favs = getFavorites();
+  if (favs.some(f => f.streamer === streamer)) {
+    favs = favs.filter(fav => fav.streamer !== streamer);
+    showFeedback('Retiré des favoris');
+  } else {
+    let catKey = "fr";
+    favs.push({ streamer, category: catKey });
+    showFeedback('Ajouté aux favoris !');
+  }
+  setFavorites(favs);
+  renderFavorites();
+  updateFavBtn();
+  const favBtn = document.querySelector(`#stream-${streamer} .stream-fav-btn`);
+  if (favBtn) {
+    if (favs.some(f => f.streamer === streamer)) {
+      favBtn.classList.add('faved');
+      favBtn.innerHTML = '<i class="fa-solid fa-star"></i>';
+    } else {
+      favBtn.classList.remove('faved');
+      favBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
     }
+  }
+}
 
-    function updateFavBtn() {
-      const input = document.getElementById('streamerInput');
-      const favBtn = document.getElementById('favBtn');
-      const streamer = input.value.trim().toLowerCase();
-      let favs = JSON.parse(localStorage.getItem('twitchFavorites') || '[]');
-      if (streamer && favs.includes(streamer)) {
-        favBtn.classList.add('faved');
-        favBtn.innerHTML = '<i class="fa-solid fa-star"></i>';
-      } else {
-        favBtn.classList.remove('faved');
-        favBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
-      }
-    }
+// Ajout avec la touche Entrée
+document.getElementById('streamerInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') addStreamer();
+  setTimeout(updateFavBtn, 10);
+});
+document.getElementById('streamerInput').addEventListener('input', updateFavBtn);
+document.getElementById('favBtn').addEventListener('click', addToFavorites);
 
-    // Feedback utilisateur
-    function showFeedback(msg, isError = false) {
-      const feedback = document.getElementById('feedbackMsg');
-      feedback.textContent = msg;
-      feedback.className = 'feedback-msg' + (isError ? ' error' : '');
-      feedback.classList.add('show');
-      setTimeout(() => {
-        feedback.classList.remove('show');
-      }, 1800);
-    }
+// Notifications navigateur : demande permission au chargement
+if ("Notification" in window && Notification.permission !== "granted") {
+  Notification.requestPermission();
+}
 
-    function showError(msg) {
-      showFeedback(msg, true);
-      const errorDiv = document.getElementById('errorMsg');
-      errorDiv.textContent = msg;
-      errorDiv.style.display = 'block';
-      setTimeout(() => {
-        errorDiv.style.display = 'none';
-      }, 1800);
-    }
+// Volet déroulant
+const aside = document.getElementById('favorites-aside');
+const asideToggle = document.getElementById('asideToggle');
+const mainContent = document.getElementById('mainContent');
+let asideOpen = false;
+asideToggle.addEventListener('click', () => {
+  asideOpen = !asideOpen;
+  aside.classList.toggle('open', asideOpen);
+  mainContent.classList.toggle('shifted', asideOpen);
+  asideToggle.title = asideOpen ? "Cacher les favoris" : "Afficher les favoris";
+  asideToggle.innerHTML = asideOpen ? '<i class="fa-solid fa-chevron-left"></i>' : '<i class="fa-solid fa-star"></i>';
+});
 
-    function addStreamer(streamerName) {
-      const input = document.getElementById('streamerInput');
-      const streamer = (streamerName || input.value).trim().toLowerCase();
-      if (streamer) {
-        if (document.getElementById('stream-' + streamer)) {
-          showError('Ce streamer est déjà affiché !');
-          input.value = '';
-          return;
-        }
-        const container = document.createElement('div');
-        container.className = 'stream-container';
-        container.id = 'stream-' + streamer;
-        container.innerHTML = `
-          <div class="stream-header">
-            <span class="stream-title">${streamer}
-              <button class="stream-fav-btn${JSON.parse(localStorage.getItem('twitchFavorites') || '[]').includes(streamer) ? ' faved' : ''}" title="Ajouter/Retirer des favoris" onclick="toggleFavorite('${streamer}');event.stopPropagation();">
-                <i class="fa${JSON.parse(localStorage.getItem('twitchFavorites') || '[]').includes(streamer) ? 's' : 'r'} fa-star"></i>
-              </button>
-            </span>
-            <button class="remove-btn" onclick="removeStreamer('${streamer}')"><i class="fa-solid fa-xmark"></i></button>
-          </div>
-          <iframe
-            class="stream-player"
-            src="https://player.twitch.tv/?channel=${streamer}&parent=${parent}"
-            allowfullscreen>
-          </iframe>
-        `;
-        document.getElementById('streams').appendChild(container);
-        input.value = '';
-        input.focus();
-        showFeedback('Stream ajouté !');
-      }
-    }
+// Dark mode toggle
+document.getElementById('darkToggle').addEventListener('click', function() {
+  document.body.classList.toggle('dark-mode');
+  this.innerHTML = document.body.classList.contains('dark-mode')
+    ? '<i class="fa-solid fa-sun"></i>'
+    : '<i class="fa-solid fa-moon"></i>';
+  localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? '1' : '0');
+});
 
-    function removeStreamer(streamer) {
-      const el = document.getElementById('stream-' + streamer);
-      if (el) {
-        el.remove();
-        showFeedback('Stream supprimé');
-      }
-    }
+// Appliquer dark mode au chargement si activé
+window.onload = () => {
+  document.getElementById('streamerInput').focus();
+  renderFavorites();
+  updateFavBtn();
+  if (localStorage.getItem('darkMode') === '1') {
+    document.body.classList.add('dark-mode');
+    document.getElementById('darkToggle').innerHTML = '<i class="fa-solid fa-sun"></i>';
+  }
+};
 
-    function clearAll() {
-      document.getElementById('streams').innerHTML = '';
-      showFeedback('Tous les streams ont été supprimés');
-    }
+// Pour accès depuis HTML
+window.addStreamer = addStreamer;
+window.removeStreamer = removeStreamer;
+window.clearAll = clearAll;
+window.removeFavorite = removeFavorite;
+window.toggleFavorite = toggleFavorite;
 
-    function toggleFavorite(streamer) {
-      let favs = JSON.parse(localStorage.getItem('twitchFavorites') || '[]');
-      if (favs.includes(streamer)) {
-        favs = favs.filter(fav => fav !== streamer);
-        showFeedback('Retiré des favoris');
-      } else {
-        favs.push(streamer);
-        showFeedback('Ajouté aux favoris !');
-      }
-      localStorage.setItem('twitchFavorites', JSON.stringify(favs));
-      renderFavorites();
-      updateFavBtn();
-      // Met à jour l'étoile sur la carte si ouverte
-      const favBtn = document.querySelector(`#stream-${streamer} .stream-fav-btn`);
-      if (favBtn) {
-        if (favs.includes(streamer)) {
-          favBtn.classList.add('faved');
-          favBtn.innerHTML = '<i class="fa-solid fa-star"></i>';
-        } else {
-          favBtn.classList.remove('faved');
-          favBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
-        }
-      }
-    }
-
-    // Ajout avec la touche Entrée
-    document.getElementById('streamerInput').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') addStreamer();
-      setTimeout(updateFavBtn, 10);
-    });
-
-    document.getElementById('streamerInput').addEventListener('input', updateFavBtn);
-    document.getElementById('favBtn').addEventListener('click', addToFavorites);
-
-    // Dark mode toggle
-    document.getElementById('darkToggle').addEventListener('click', function() {
-      document.body.classList.toggle('dark-mode');
-      this.innerHTML = document.body.classList.contains('dark-mode')
-        ? '<i class="fa-solid fa-sun"></i>'
-        : '<i class="fa-solid fa-moon"></i>';
-      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? '1' : '0');
-    });
-
-    // Appliquer dark mode au chargement si activé
-    window.onload = () => {
-      document.getElementById('streamerInput').focus();
-      renderFavorites();
-      updateFavBtn();
-      if (localStorage.getItem('darkMode') === '1') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('darkToggle').innerHTML = '<i class="fa-solid fa-sun"></i>';
-      }
-    };
-
-    // Pour accès depuis HTML
-    window.addStreamer = addStreamer;
-    window.removeStreamer = removeStreamer;
-    window.clearAll = clearAll;
-    window.removeFavorite = removeFavorite;
-    window.toggleFavorite = toggleFavorite;
+function openAndCopyDiscord() {
+  const tag = document.getElementById('discordTag').innerText;
+  window.open('https://discord.com/app', '_blank');
+  navigator.clipboard.writeText(tag).then(() => {
+    const copied = document.getElementById('discordCopied');
+    copied.style.display = 'block';
+    setTimeout(() => copied.style.display = 'none', 1500);
+  });
+}
   </script>
 </body>
 </html>
