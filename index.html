@@ -519,79 +519,104 @@
       localStorage.setItem('twitchFavoritesV2', JSON.stringify(favs));
     }
 
-    function renderFavorites() {
+    // Demande la permission au chargement
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+
+    // Stocke l'état précédent des lives
+    let previousOnline = [];
+
+    // Modifie renderFavorites pour détecter les nouveaux lives
+    async function renderFavorites() {
       const aside = document.getElementById('favorites-aside');
       aside.innerHTML = '';
 
       const favs = getFavorites();
 
       // Récupère les infos de tous les favoris en parallèle
-      Promise.all(favs.map(async fav => {
+      const favsWithInfo = await Promise.all(favs.map(async fav => {
         const info = await getTwitchUserInfo(fav.streamer);
         return { ...fav, info };
-      })).then(favsWithInfo => {
-        // Sépare en ligne et hors ligne
-        const onlineFavs = favsWithInfo.filter(f => f.info && f.info.isLive);
-        const offlineFavs = favsWithInfo.filter(f => !f.info || !f.info.isLive);
+      }));
 
-        // Bloc EN LIGNE
-        const onlineDiv = document.createElement('div');
-        onlineDiv.className = 'fav-category';
-        onlineDiv.innerHTML = `<div class="fav-category-title" style="color:#43ff43;">🟢 En ligne</div>`;
-        const onlineList = document.createElement('div');
-        onlineList.className = 'favorites-list';
-        if (onlineFavs.length === 0) {
-          onlineList.innerHTML = `<span style="color:#888;font-size:1rem;">Aucun favori en ligne</span>`;
-        } else {
-          onlineFavs.forEach(fav => {
-            const pill = document.createElement('div');
-            pill.className = 'favorite-pill';
-            pill.title = `Afficher ${fav.streamer}`;
-            const info = fav.info;
-            pill.innerHTML = `
-              <span style="display:flex;align-items:center;gap:0.5rem;">
-                <img src="${info?.avatar || 'https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png'}" alt="" style="width:24px;height:24px;border-radius:50%;border:2px solid #43ff43;">
-                <span class="pill-name">${info?.displayName || fav.streamer}</span>
-                <span style="width:10px;height:10px;border-radius:50%;background:#43ff43;display:inline-block;margin-left:6px;" title="En ligne"></span>
-              </span>
-              <button class="pill-remove" title="Retirer des favoris" onclick="removeFavorite('${fav.streamer}');event.stopPropagation();"><i class="fa-solid fa-xmark"></i></button>
-            `;
-            pill.onclick = () => addStreamer(fav.streamer);
-            onlineList.appendChild(pill);
-          });
-        }
-        onlineDiv.appendChild(onlineList);
-        aside.appendChild(onlineDiv);
+      // Sépare en ligne et hors ligne
+      const onlineFavs = favsWithInfo.filter(f => f.info && f.info.isLive);
+      const offlineFavs = favsWithInfo.filter(f => !f.info || !f.info.isLive);
 
-        // Bloc HORS LIGNE
-        const offlineDiv = document.createElement('div');
-        offlineDiv.className = 'fav-category';
-        offlineDiv.innerHTML = `<div class="fav-category-title" style="color:#ff4b5c;">🔴 Hors ligne</div>`;
-        const offlineList = document.createElement('div');
-        offlineList.className = 'favorites-list';
-        if (offlineFavs.length === 0) {
-          offlineList.innerHTML = `<span style="color:#888;font-size:1rem;">Aucun favori hors ligne</span>`;
-        } else {
-          offlineFavs.forEach(fav => {
-            const pill = document.createElement('div');
-            pill.className = 'favorite-pill';
-            pill.title = `Afficher ${fav.streamer}`;
-            const info = fav.info;
-            pill.innerHTML = `
-              <span style="display:flex;align-items:center;gap:0.5rem;">
-                <img src="${info?.avatar || 'https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png'}" alt="" style="width:24px;height:24px;border-radius:50%;border:2px solid #ff4b5c;">
-                <span class="pill-name">${info?.displayName || fav.streamer}</span>
-                <span style="width:10px;height:10px;border-radius:50%;background:#ff4b5c;display:inline-block;margin-left:6px;" title="Hors ligne"></span>
-              </span>
-              <button class="pill-remove" title="Retirer des favoris" onclick="removeFavorite('${fav.streamer}');event.stopPropagation();"><i class="fa-solid fa-xmark"></i></button>
-            `;
-            pill.onclick = () => addStreamer(fav.streamer);
-            offlineList.appendChild(pill);
-          });
-        }
-        offlineDiv.appendChild(offlineList);
-        aside.appendChild(offlineDiv);
-      });
+      // --- NOTIFICATIONS PUSH ---
+      const onlineNames = onlineFavs.map(f => f.streamer);
+      // Détecte les nouveaux lives
+      if (previousOnline.length > 0 && 'Notification' in window && Notification.permission === 'granted') {
+        onlineFavs.forEach(fav => {
+          if (!previousOnline.includes(fav.streamer)) {
+            new Notification(`${fav.info.displayName || fav.streamer} est en live !`, {
+              body: fav.info.title ? fav.info.title : "Le stream vient de commencer.",
+              icon: fav.info.avatar || "https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png"
+            });
+          }
+        });
+      }
+      previousOnline = onlineNames;
+      // --- FIN NOTIFICATIONS ---
+
+      // Bloc EN LIGNE
+      const onlineDiv = document.createElement('div');
+      onlineDiv.className = 'fav-category';
+      onlineDiv.innerHTML = `<div class="fav-category-title" style="color:#43ff43;">🟢 En ligne</div>`;
+      const onlineList = document.createElement('div');
+      onlineList.className = 'favorites-list';
+      if (onlineFavs.length === 0) {
+        onlineList.innerHTML = `<span style="color:#888;font-size:1rem;">Aucun favori en ligne</span>`;
+      } else {
+        onlineFavs.forEach(fav => {
+          const pill = document.createElement('div');
+          pill.className = 'favorite-pill';
+          pill.title = `Afficher ${fav.streamer}`;
+          const info = fav.info;
+          pill.innerHTML = `
+            <span style="display:flex;align-items:center;gap:0.5rem;">
+              <img src="${info?.avatar || 'https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png'}" alt="" style="width:24px;height:24px;border-radius:50%;border:2px solid #43ff43;">
+              <span class="pill-name">${info?.displayName || fav.streamer}</span>
+              <span style="width:10px;height:10px;border-radius:50%;background:#43ff43;display:inline-block;margin-left:6px;" title="En ligne"></span>
+            </span>
+            <button class="pill-remove" title="Retirer des favoris" onclick="removeFavorite('${fav.streamer}');event.stopPropagation();"><i class="fa-solid fa-xmark"></i></button>
+          `;
+          pill.onclick = () => addStreamer(fav.streamer);
+          onlineList.appendChild(pill);
+        });
+      }
+      onlineDiv.appendChild(onlineList);
+      aside.appendChild(onlineDiv);
+
+      // Bloc HORS LIGNE
+      const offlineDiv = document.createElement('div');
+      offlineDiv.className = 'fav-category';
+      offlineDiv.innerHTML = `<div class="fav-category-title" style="color:#ff4b5c;">🔴 Hors ligne</div>`;
+      const offlineList = document.createElement('div');
+      offlineList.className = 'favorites-list';
+      if (offlineFavs.length === 0) {
+        offlineList.innerHTML = `<span style="color:#888;font-size:1rem;">Aucun favori hors ligne</span>`;
+      } else {
+        offlineFavs.forEach(fav => {
+          const pill = document.createElement('div');
+          pill.className = 'favorite-pill';
+          pill.title = `Afficher ${fav.streamer}`;
+          const info = fav.info;
+          pill.innerHTML = `
+            <span style="display:flex;align-items:center;gap:0.5rem;">
+              <img src="${info?.avatar || 'https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png'}" alt="" style="width:24px;height:24px;border-radius:50%;border:2px solid #ff4b5c;">
+              <span class="pill-name">${info?.displayName || fav.streamer}</span>
+              <span style="width:10px;height:10px;border-radius:50%;background:#ff4b5c;display:inline-block;margin-left:6px;" title="Hors ligne"></span>
+            </span>
+            <button class="pill-remove" title="Retirer des favoris" onclick="removeFavorite('${fav.streamer}');event.stopPropagation();"><i class="fa-solid fa-xmark"></i></button>
+          `;
+          pill.onclick = () => addStreamer(fav.streamer);
+          offlineList.appendChild(pill);
+        });
+      }
+      offlineDiv.appendChild(offlineList);
+      aside.appendChild(offlineDiv);
     }
 
     function addToFavorites() {
@@ -822,6 +847,8 @@
         setTimeout(() => copied.style.display = 'none', 1500);
       });
     }
+
+    setInterval(renderFavorites, 60000);
   </script>
 </body>
 </html>
