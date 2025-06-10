@@ -449,12 +449,56 @@
       0% { background-position: 20% 30%, 80% 70%; }
       100% { background-position: 30% 40%, 70% 60%; }
     }
+    .suggest-toggle {
+      position: fixed;
+      top: 90px;
+      right: 0;
+      z-index: 102; /* plus que #suggest-aside */
+      background: #23232b;
+      color: #00eaff;
+      border: none;
+      border-radius: 16px 0 0 16px;
+      font-size: 2rem;
+      padding: 0.5rem 0.7rem;
+      cursor: pointer;
+      box-shadow: -2px 2px 12px #00eaff33;
+      transition: background 0.2s, color 0.2s;
+    }
+    .suggest-toggle:hover {
+      background: #00eaff;
+      color: #23232b;
+    }
+    #suggest-aside {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: auto;
+      width: 340px;
+      height: 100vh;
+      background: #18181b;
+      border-left: 2px solid #23232b;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(.77,0,.18,1);
+      z-index: 101;
+    }
+    #suggest-aside.open {
+      transform: translateX(0);
+    }
+    /* Limite la hauteur et active le scroll vertical dans le menu suggestion */
+    #suggest-list {
+      max-height: 80vh;
+      overflow-y: auto;
+      padding-right: 4px; /* Pour éviter que le scroll cache le contenu */
+    }
   </style>
 </head>
 <body>
   <div class="animated-bg"></div>
   <button class="aside-toggle" id="asideToggle" title="Afficher les favoris"><i class="fa-solid fa-star"></i></button>
   <button class="dark-toggle" id="darkToggle" title="Basculer le mode sombre"><i class="fa-solid fa-moon"></i></button>
+  <button class="suggest-toggle" id="suggestToggle" title="Suggestions GTA V">
+    <i class="fa-solid fa-lightbulb"></i>
+  </button>
   <header>
     <i class="fa-brands fa-twitch" style="color:#9147ff;margin-right:0.7rem;font-size:2.2rem;"></i>
     <span id="animatedTitle">Virus MultiStream</span>
@@ -471,14 +515,24 @@
         <button class="fav-btn" id="favBtn" title="Ajouter aux favoris"><i class="fa-regular fa-star"></i></button>
       </div>
       <div id="streams">
-        <div id="welcome" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;opacity:0.85;">
-          <div style="font-size:2.2rem;font-family:'Orbitron',sans-serif;color:#9147ff;text-shadow:0 0 24px #9147ff88;animation:fadeInUp 1.2s;">
+        <div id="welcome" style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 60vh;
+          opacity: 0.85;
+          margin: auto;
+          min-width: 320px;
+          max-width: 600px;
+        ">
+          <div style="font-size:2.2rem;font-family:'Orbitron',sans-serif;color:#9147ff;text-shadow:0 0 24px #9147ff88;animation:fadeInUp 1.2s;text-align:center;">
             👋 Bienvenue sur <span style="color:#00eaff;">Virus MultiStream</span> !
           </div>
           <div style="margin:1.5rem 0 1rem 0;font-size:1.2rem;color:#fff;max-width:500px;text-align:center;">
             Ajoute tes streamers favoris à gauche ou découvre des chaînes populaires en cliquant sur les boutons ci-dessous.:
           </div>
-          <div style="display:flex;gap:1rem;">
+          <div style="display:flex;gap:1rem;justify-content:center;">
             <button onclick="addStreamer('TwincyTV')" style="background:#9147ff;color:#fff;border:none;border-radius:12px;padding:0.7rem 1.3rem;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 12px #9147ff33;">🎮 TwincyTV</button>
             <button onclick="addStreamer('Aenot')" style="background:#00eaff;color:#23232b;border:none;border-radius:12px;padding:0.7rem 1.3rem;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 12px #00eaff33;">⚡ Aenot</button>
             <button onclick="addStreamer('Khadim')" style="background:#474aff;color:#fff;border:none;border-radius:12px;padding:0.7rem 1.3rem;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 12px #9147ff33;">🎮 Khadim</button>
@@ -502,6 +556,13 @@
       <i class="fa-brands fa-discord"></i> Serveur
     </a>
   </div>
+  <div id="gta-suggestion" style="margin:1.5rem 0;"></div>
+  <aside id="suggest-aside">
+    <div class="fav-category-title" style="color:#00eaff;">
+      <i class="fa-solid fa-lightbulb"></i> Suggestions GTA V
+    </div>
+    <div id="suggest-list" class="favorites-list" style="flex-direction:column;gap:1.2rem;"></div>
+  </aside>
   <script>
     const parent = location.hostname;
 
@@ -789,6 +850,48 @@
       };
     }
 
+    // Fonction pour récupérer les streams GTA V (catégorie Twitch)
+    async function getGTAStreams() {
+      const gtaCategoryId = '32982';
+      const res = await fetch(`https://api.twitch.tv/helix/streams?game_id=${gtaCategoryId}&language=fr&first=10`, {
+        headers: {
+          'Client-ID': TWITCH_CLIENT_ID,
+          'Authorization': `Bearer ${TWITCH_ACCESS_TOKEN}`
+        }
+      });
+      const data = await res.json();
+      return data.data || [];
+    }
+
+    // Affiche une suggestion de streamer GTA V en temps réel
+    async function showGTASuggestion() {
+      const suggestionDiv = document.getElementById('gta-suggestion');
+      suggestionDiv.style.display = "flex";
+      suggestionDiv.style.gap = "1.5rem";
+      suggestionDiv.style.flexWrap = "wrap";
+      suggestionDiv.innerHTML = `<span style="color:#888;">Chargement des suggestions GTA V...</span>`;
+      const gtaStreams = await getGTAStreams();
+      if (gtaStreams.length === 0) {
+        suggestionDiv.innerHTML = `<span style="color:#888;">Aucun streamer GTA V en live actuellement.</span>`;
+        return;
+      }
+      suggestionDiv.innerHTML = gtaStreams.slice(0, 3).map(stream => `
+        <div style="display:flex;align-items:center;gap:1rem;background:#23232b;border-radius:14px;padding:1rem 1.5rem;box-shadow:0 2px 12px #00eaff22;min-width:260px;">
+          <img src="${stream.thumbnail_url.replace('{width}', '80').replace('{height}', '80')}" alt="" style="width:48px;height:48px;border-radius:50%;border:2px solid #00eaff;">
+          <div>
+            <div style="font-size:1.1rem;font-weight:bold;color:#00eaff;">Suggestion GTA V :</div>
+            <div style="font-size:1.2rem;color:#ffd700;">${stream.user_name}</div>
+            <div style="color:#43ff43;font-size:0.95rem;">${stream.viewer_count} viewers</div>
+            <button onclick="addStreamer('${stream.user_name}')" style="margin-top:0.5rem;background:#00eaff;color:#23232b;border:none;border-radius:8px;padding:0.4rem 1rem;font-weight:bold;cursor:pointer;">Regarder</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Met à jour la suggestion toutes les 60 secondes
+    showGTASuggestion();
+    setInterval(showGTASuggestion, 60000);
+
     // Ajout avec la touche Entrée
     document.getElementById('streamerInput').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') addStreamer();
@@ -849,6 +952,67 @@
     }
 
     setInterval(renderFavorites, 60000);
+
+    const suggestAside = document.getElementById('suggest-aside');
+    const suggestToggle = document.getElementById('suggestToggle');
+    let suggestOpen = false;
+
+    suggestToggle.addEventListener('click', () => {
+      suggestOpen = !suggestOpen;
+      suggestAside.classList.toggle('open', suggestOpen);
+      suggestToggle.title = suggestOpen ? "Cacher les suggestions" : "Suggestions GTA V";
+      if (suggestOpen) renderSuggestionsGTA();
+    });
+
+    // Fonction pour afficher TOUS les streamers GTA V avec "Flashback WL" dans le titre
+    async function renderSuggestionsGTA() {
+      const suggestList = document.getElementById('suggest-list');
+      suggestList.innerHTML = `<span style="color:#888;">Chargement des suggestions Flashback WL...</span>`;
+      // Récupère les streams GTA V (catégorie Twitch)
+      const gtaCategoryId = '32982';
+      // On récupère jusqu'à 100 streams pour ne rien louper
+      const res = await fetch(`https://api.twitch.tv/helix/streams?game_id=${gtaCategoryId}&language=fr&first=100`, {
+        headers: {
+          'Client-ID': TWITCH_CLIENT_ID,
+          'Authorization': `Bearer ${TWITCH_ACCESS_TOKEN}`
+        }
+      });
+      const data = await res.json();
+      const gtaStreams = data.data || [];
+      // Filtre uniquement les streams dont le titre contient "flashback wl" (insensible à la casse)
+      const flashbackStreams = gtaStreams.filter(stream => {
+        const t = stream.title.toLowerCase();
+        return t.includes('flashback wl') || t.includes('flashbackwl');
+      });
+      if (flashbackStreams.length === 0) {
+        suggestList.innerHTML = `<span style="color:#888;">Aucun streamer Flashback WL en live actuellement.</span>`;
+        return;
+      }
+      suggestList.innerHTML = flashbackStreams.map(stream => `
+        <div style="display:flex;align-items:center;gap:0.7rem;background:#23232b;border-radius:10px;padding:0.5rem 0.8rem;box-shadow:0 2px 8px #00eaff11;min-width:120px;">
+          <img src="${stream.thumbnail_url.replace('{width}', '40').replace('{height}', '40')}" alt="" style="width:32px;height:32px;border-radius:50%;border:2px solid #00eaff;">
+          <div style="flex:1;">
+            <div style="font-size:1rem;font-weight:bold;color:#00eaff;">${stream.user_name}</div>
+            <div style="color:#ffd700;font-size:0.92rem;">${stream.title}</div>
+            <div style="color:#43ff43;font-size:0.92rem;">${stream.viewer_count} viewers</div>
+          </div>
+          <button onclick="addStreamer('${stream.user_name}')" style="background:#00eaff;color:#23232b;border:none;border-radius:7px;padding:0.2rem 0.7rem;font-weight:bold;cursor:pointer;font-size:0.95rem;">Regarder</button>
+        </div>
+      `).join('');
+    }
+
+    // Fermer le menu suggestion si on clique en dehors
+    document.addEventListener('mousedown', function(e) {
+      if (
+        suggestOpen &&
+        !suggestAside.contains(e.target) &&
+        !suggestToggle.contains(e.target)
+      ) {
+        suggestOpen = false;
+        suggestAside.classList.remove('open');
+        suggestToggle.title = "Suggestions GTA V";
+      }
+    });
   </script>
 </body>
 </html>
