@@ -2,9 +2,9 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Virus MultiStream </title>
-  <link rel="icon" type="image/png" href="https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png">
+  <link rel="icon" type="image/png" href="https://cdn.discordapp.com/attachments/1240781206145208341/1384645156325822564/ChatGPT_Image_17_juin_2025_23_25_08_1.png?ex=68532eca&is=6851dd4a&hm=4d4bec6ba570ae3388e392c9b50ed7112de8f5503a9fa58f7e677237b88ac0be&">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -402,6 +402,15 @@
       .stream-player {
         min-height: 180px;
       }
+    }
+    @media (max-width: 600px) {
+      .stream-frame {
+        width: 100% !important;
+        height: 220px !important;
+        margin: 0 auto;
+        display: block;
+      }
+      /* Adapte aussi les paddings, polices, boutons, etc. */
     }
     body.dark-mode {
       background: linear-gradient(120deg, #18181b 0%, #23232b 100%);
@@ -926,6 +935,7 @@
     window.onload = () => {
       document.getElementById('streamerInput').focus();
       renderFavorites();
+      renderClips();
       updateFavBtn();
       if (localStorage.getItem('darkMode') === '1') {
         document.body.classList.add('dark-mode');
@@ -1012,6 +1022,38 @@
         suggestToggle.title = "Suggestions GTA V";
       }
     });
+
+    function saveClip(streamer) {
+      const url = `https://www.twitch.tv/${streamer}`;
+      const title = prompt("Titre du clip à sauvegarder :", `Clip de ${streamer}`);
+      if (!title) return;
+      let clips = JSON.parse(localStorage.getItem('twitchClips') || '[]');
+      clips.push({ streamer, url, title, date: new Date().toISOString() });
+      localStorage.setItem('twitchClips', JSON.stringify(clips));
+      showFeedback('Clip sauvegardé !');
+      renderClips();
+    }
+
+    function renderClips() {
+      let clips = JSON.parse(localStorage.getItem('twitchClips') || '[]');
+      const aside = document.getElementById('favorites-aside');
+      let clipsDiv = document.getElementById('clips-section');
+      if (!clipsDiv) {
+        clipsDiv = document.createElement('div');
+        clipsDiv.id = 'clips-section';
+        aside.appendChild(clipsDiv);
+      }
+      clipsDiv.innerHTML = `<div class="fav-category-title" style="color:#ffd700;">🎬 Clips favoris</div>` +
+        (clips.length === 0
+          ? `<span style="color:#888;">Aucun clip sauvegardé</span>`
+          : clips.map(clip => `
+            <div style="margin-bottom:1rem;background:#23232b;padding:0.5rem 1rem;border-radius:10px;">
+              <div style="font-weight:bold;color:#00eaff;">${clip.title}</div>
+              <a href="${clip.url}" target="_blank" style="color:#ffd700;">Voir le clip</a>
+              <span style="color:#888;font-size:0.9rem;"> (${new Date(clip.date).toLocaleString()})</span>
+            </div>
+          `).join(''));
+    }
   </script>
 </body>
 </html>
