@@ -614,17 +614,19 @@
       const onlineFavs = favsWithInfo.filter(f => f.info && f.info.isLive);
       const offlineFavs = favsWithInfo.filter(f => !f.info || !f.info.isLive);
 
-      // --- NOTIFICATIONS PUSH ---
+      // --- NOTIFICATIONS PUSH MODIFIÉES ---
       const onlineNames = onlineFavs.map(f => f.streamer);
       // Détecte les nouveaux lives
       if (previousOnline.length > 0 && 'Notification' in window && Notification.permission === 'granted') {
         onlineFavs.forEach(fav => {
           if (!previousOnline.includes(fav.streamer)) {
+            // Notification SILENCIEUSE (sans son du navigateur)
             new Notification(`${fav.info.displayName || fav.streamer} est en live !`, {
               body: fav.info.title ? fav.info.title : "Le stream vient de commencer.",
-              icon: fav.info.avatar || "https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png"
+              icon: fav.info.avatar || "https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png",
+              silent: true // Ajouter cette ligne
             });
-            playNotificationSound(); // Joue le son de notification ici
+            playNotificationSound(); // SEUL votre son personnalisé se joue
           }
         });
       }
@@ -1124,4 +1126,3 @@
   </script>
 </body>
 </html>
-
