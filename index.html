@@ -505,6 +505,7 @@
   <div class="animated-bg"></div>
   <button class="aside-toggle" id="asideToggle" title="Afficher les favoris"><i class="fa-solid fa-star"></i></button>
   <button class="dark-toggle" id="darkToggle" title="Basculer le mode sombre"><i class="fa-solid fa-moon"></i></button>
+  <button class="dark-toggle" id="soundToggle" title="Changer le son de notification" style="right: 80px;"><i class="fa-solid fa-volume-high"></i></button>
   <button class="suggest-toggle" id="suggestToggle" title="Suggestions GTA V">
     <i class="fa-solid fa-lightbulb"></i>
   </button>
@@ -623,6 +624,7 @@
               body: fav.info.title ? fav.info.title : "Le stream vient de commencer.",
               icon: fav.info.avatar || "https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png"
             });
+            playNotificationSound(); // Joue le son de notification ici
           }
         });
       }
@@ -931,6 +933,19 @@
       localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? '1' : '0');
     });
 
+    // Sound toggle
+    document.getElementById('soundToggle').addEventListener('click', function() {
+      const sounds = Object.keys(NOTIFICATION_SOUNDS);
+      const currentSound = getSelectedSound();
+      const currentIndex = sounds.indexOf(currentSound);
+      const nextIndex = (currentIndex + 1) % sounds.length;
+      const nextSound = sounds[nextIndex];
+      
+      localStorage.setItem('notificationSound', nextSound);
+      showFeedback(`Son: ${NOTIFICATION_SOUNDS[nextSound].name}`);
+      playNotificationSound(); // Test du nouveau son
+    });
+
     // Appliquer dark mode au chargement si activé
     window.onload = () => {
       document.getElementById('streamerInput').focus();
@@ -1054,6 +1069,58 @@
             </div>
           `).join(''));
     }
+
+    // Sons de notification disponibles
+    const NOTIFICATION_SOUNDS = {
+      'ding': { type: 'generated', freq: 880, name: 'Ding classique' },
+      'chime': { type: 'generated', freq: 1320, name: 'Carillon' },
+      'beep': { type: 'generated', freq: 440, name: 'Bip grave' },
+      'custom': { type: 'file', src: './notification.mp3', name: 'Son personnalisé' },
+      'discord': { type: 'url', src: 'https://cdn.discordapp.com/attachments/123/notification.mp3', name: 'Style Discord' }
+    };
+
+    // Récupère le son choisi par l'utilisateur
+    function getSelectedSound() {
+      return localStorage.getItem('notificationSound') || 'ding';
+    }
+
+    // Son de notification avec fichier audio personnalisé
+    function playNotificationSound() {
+      const soundType = getSelectedSound();
+      const sound = NOTIFICATION_SOUNDS[soundType];
+      
+      if (!sound) return;
+      
+      try {
+        if (sound.type === 'file' || sound.type === 'url') {
+          // Utiliser un fichier audio
+          const audio = new Audio(sound.src);
+          audio.volume = 0.3;
+          audio.play().catch(e => console.log('Erreur lecture audio:', e));
+        } else if (sound.type === 'generated') {
+          // Son généré par JavaScript
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          
+          o.type = 'sine';
+          o.frequency.value = sound.freq;
+          g.gain.value = 0.2;
+          
+          o.connect(g);
+          g.connect(ctx.destination);
+          
+          o.start();
+          g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
+          o.stop(ctx.currentTime + 0.5);
+        }
+      } catch (e) {
+        console.log('Erreur son notification:', e);
+      }
+    }
+
+    // Utilisation :
+    playNotificationSound();
   </script>
 </body>
 </html>
